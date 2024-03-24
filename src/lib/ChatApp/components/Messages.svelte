@@ -1,20 +1,7 @@
 <script lang="ts">
 	import type { ChatMessage } from '$lib/models/ChatMessage';
 
-	const messages: ChatMessage[] = [
-		{
-			author: 'Quangdao Nguyen',
-			type: 'self',
-			content: 'This is a fake message.',
-			timestamp: new Date(2024, 2, 24, 16, 24, 17)
-		},
-		{
-			author: 'Jack Sparrow',
-			type: 'other',
-			content: 'This is a fake message.',
-			timestamp: new Date(2024, 2, 24, 16, 25, 18)
-		}
-	];
+	export let messages: ChatMessage[];
 </script>
 
 <div class="messages">
@@ -36,6 +23,8 @@
 
 	.messages {
 		padding: 1em;
+		flex: 1 1 0;
+		overflow-y: scroll;
 	}
 
 	.message {
@@ -63,18 +52,19 @@
 			font-size: 0.875em;
 		}
 
-    &-author {
-      display: inline-block;
-    }
+		&-author {
+			display: inline-block;
+		}
 
-    &-time {
-      font-size: 0.875em;
-      display: inline-block;
-      margin-left: 0.5em;
-    }
+		&-time {
+			font-size: 0.875em;
+			display: inline-block;
+			margin-left: 0.5em;
+		}
 
-    &-content {
-      margin-top: 1em;
-    }
+		&-content {
+			margin-top: 1em;
+			white-space: pre-wrap;
+		}
 	}
 </style>
