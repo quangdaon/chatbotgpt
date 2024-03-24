@@ -1,3 +1,7 @@
+<script>
+	import Footer from '$lib/layout/Footer.svelte';
+</script>
+
 <h1>About EchoVerse</h1>
 
 <p>
@@ -13,3 +17,5 @@
 	<a href="https://brandmark.io/">BrandMark</a>. Any affiliation with a real brand is entirely
 	unintentional.
 </p>
+
+<Footer />
