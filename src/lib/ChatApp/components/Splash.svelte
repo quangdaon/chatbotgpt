@@ -30,6 +30,8 @@
 </main>
 
 <style lang="scss">
+	@use '~/breakpoints';
+
 	.splash {
 		background: var(--color-dark);
 		color: var(--color-white);
@@ -37,22 +39,28 @@
 		display: flex;
 		height: 100vh;
 		justify-content: center;
-    &-content {
-      margin-top: 5em;
-    }
+		&-content {
+			margin-top: 5em;
+		}
 	}
 
 	h1 {
-		font-size: 4em;
+		font-size: 2em;
 		margin-bottom: 0.25em;
 		text-transform: uppercase;
+		@include breakpoints.large {
+			font-size: 4em;
+		}
 	}
 
 	.field {
-		font-size: 2em;
+		font-size: 1.5em;
 		width: fit-content;
 		margin: 1em auto;
 		position: relative;
+		@include breakpoints.large {
+			font-size: 2em;
+		}
 
 		label {
 			display: block;
@@ -89,11 +97,14 @@
 		background: var(--color-primary);
 		padding: 0.25em 0.5em;
 		border: none;
-		font-size: 2em;
+		font-size: 1.2em;
 		color: #fff;
 		font-family: var(--font-heading);
 		border-radius: 0.25em;
 		margin-bottom: 1em;
+		@include breakpoints.large {
+			font-size: 2em;
+		}
 		span,
 		img {
 			display: inline-block;

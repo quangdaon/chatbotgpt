@@ -16,19 +16,24 @@
 </header>
 
 <style lang="scss">
+  @use '~/breakpoints';
+
 	.header {
 		display: flex;
 		padding: 1em;
 		background: var(--color-primary);
 		justify-content: space-between;
-    align-items: center;
+		align-items: center;
 	}
 
 	.home {
 		img {
 			display: block;
-			height: 2em;
+			height: 1.5em;
 			width: auto;
+			@include breakpoints.large {
+				height: 2.2em;
+			}
 		}
 	}
 </style>

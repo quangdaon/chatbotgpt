@@ -26,12 +26,23 @@
 				<li>
 					<button on:click|preventDefault={signOut}>Sign Out</button>
 				</li>
+				<li>
+					<hr />
+				</li>
+				<li>
+					<a href="/echoverse/about">About</a>
+				</li>
+				<li>
+					<a href="/echoverse/privacy">Privacy Policy</a>
+				</li>
 			</ul>
 		</div>
 	{/if}
 </div>
 
 <style lang="scss">
+	@use '~/breakpoints';
+
 	.profile {
 		position: relative;
 		color: var(--color-white);
@@ -47,10 +58,22 @@
 
 	.avatar {
 		img {
-			width: 2em;
+			width: 1.5em;
 			display: block;
 			border: 2px solid var(--color-white);
 			border-radius: 50%;
+
+			@include breakpoints.large {
+				width: 2em;
+			}
+		}
+	}
+
+	.username {
+		display: none;
+
+		@include breakpoints.large {
+			display: block;
 		}
 	}
 
@@ -67,16 +90,24 @@
 			background: var(--color-white);
 			li {
 				width: 100%;
-			}
-			a,
-			button {
-				width: 100%;
-				color: var(--color-black);
-				border: none;
-				text-align: left;
-				padding: 0.5em;
-				&:hover {
-					background: rgba(#000, 0.1);
+				margin: 0;
+				hr {
+					border-color: #ddd;
+					margin: 0;
+				}
+				a,
+				button {
+					display: block;
+					text-decoration: none;
+					width: 100%;
+					color: var(--color-black);
+					border: none;
+					text-align: left;
+					padding: 0.5em;
+					background-color: transparent;
+					&:hover {
+						background: rgba(#000, 0.1);
+					}
 				}
 			}
 		}
