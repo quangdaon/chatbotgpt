@@ -1,15 +1,6 @@
 <script lang="ts">
-	import Footer from '$lib/layout/Footer.svelte';
-import Header from '$lib/layout/Header.svelte';
-	import { userName } from '$lib/stores/config';
-
-	let signOut = () => {
-		$userName = '';
-	};
+	import Header from '$lib/layout/Header.svelte';
 </script>
 
 <Header />
 
-<h1>Hello {$userName}</h1>
-
-<button on:click|preventDefault={signOut}>Sign Out</button>
