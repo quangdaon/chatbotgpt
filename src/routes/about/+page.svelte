@@ -1,10 +1,13 @@
 <script>
 	import Footer from '$lib/layout/Footer.svelte';
+	import Header from '$lib/layout/Header.svelte';
 </script>
 
 <svelte:head>
 	<title>About EchoVerse</title>
 </svelte:head>
+
+<Header />
 
 <main class="copy">
 	<h1>About EchoVerse</h1>

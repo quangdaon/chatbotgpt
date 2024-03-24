@@ -10,6 +10,10 @@
 
 
 <style>
+  .footer {
+    display: block;
+    width: 100%;
+  }
   .footer-content {
     max-width: 1080px;
     margin: auto;

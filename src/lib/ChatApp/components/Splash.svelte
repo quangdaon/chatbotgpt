@@ -37,7 +37,9 @@
 		display: flex;
 		height: 100vh;
 		justify-content: center;
-		align-items: center;
+    &-content {
+      margin-top: 5em;
+    }
 	}
 
 	h1 {

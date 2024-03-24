@@ -1,16 +1,19 @@
 <script>
 	import Footer from '$lib/layout/Footer.svelte';
+	import Header from '$lib/layout/Header.svelte';
 </script>
 
 <svelte:head>
 	<title>EchoVerse - Privacy Policy</title>
 </svelte:head>
 
+<Header />
+
 <main class="copy">
 	<h1>Privacy Policy</h1>
 
 	<p>
-		Although EchoVerse is not a real chatting service, it is still important that you are aaware of
+		Although EchoVerse is not a real chatting service, it is still important that you are aware of
 		how your information is collected and used.
 	</p>
 
