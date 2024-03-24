@@ -4,6 +4,7 @@
 
 	--color-white: #fbfef9;
 	--color-black: #0c0910;
+	--color-gray: var(--color-black);
 	--color-dark: #1f1054;
 	--color-primary: #6341d2;
 	--color-secondary: #4c66cd;
@@ -14,6 +15,7 @@
   @media only screen and (prefers-color-scheme: light) {
 		--color-background: var(--color-white);
 		--color-foreground: var(--color-black);
+    --color-gray: #dbd7e0;
 	}
 }
 
