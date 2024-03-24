@@ -1,3 +1,5 @@
+@use './utils/theme';
+
 :root {
 	--font-heading: 'Montserrat', sans-serif;
 	--font-body: 'Roboto', sans-serif;
@@ -12,7 +14,7 @@
 	--color-background: var(--color-dark);
 	--color-foreground: var(--color-white);
 
-  @media only screen and (prefers-color-scheme: light) {
+  @include theme.light {
 		--color-background: var(--color-white);
 		--color-foreground: var(--color-black);
     --color-gray: #dbd7e0;
