@@ -6,15 +6,24 @@
 	import MessageEntry from './MessageEntry.svelte';
 	import Messages from './Messages.svelte';
 	import { userName } from '$lib/stores/config';
+	import ChatSidebar from './ChatSidebar.svelte';
 
-	let bot: Bot = {
-		name: 'Jack Sparrow',
-		profilePicture: '/echoverse/profile/generic.png'
-	};
+	let bots: Bot[] = [
+		{
+			name: 'Jack Sparrow',
+			profilePicture: '/echoverse/profile/generic.png'
+		},
+		{
+			name: 'Oswald Copperpot',
+			profilePicture: '/echoverse/profile/generic.png'
+		}
+	];
+
+	let bot: Bot = bots[0];
 
 	let messages: ChatMessage[] = [
 		{
-			author: 'Quangdao Nguyen',
+			author: $userName,
 			type: 'self',
 			content: 'This is a fake message.',
 			timestamp: new Date(2024, 2, 24, 16, 24, 17)
@@ -44,6 +53,9 @@
 	<Header />
 
 	<div class="body">
+		<div class="sidebar">
+			<ChatSidebar {bots} />
+		</div>
 
 		<div class="chat-app">
 			<ChatInfo {bot} />
@@ -66,6 +78,10 @@
 	.body {
 		display: flex;
 		flex: 1 1 0;
+	}
+
+	.sidebar {
+		flex: 0 0 20%;
 	}
 
 	.chat-app {
