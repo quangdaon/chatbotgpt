@@ -27,6 +27,7 @@
 			img {
 				display: block;
 				width: 2em;
+        border-radius: 50%;
 			}
 		}
 		&-name {

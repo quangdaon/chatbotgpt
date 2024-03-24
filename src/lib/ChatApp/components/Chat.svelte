@@ -7,36 +7,24 @@
 	import Messages from './Messages.svelte';
 	import { userName } from '$lib/stores/config';
 	import ChatSidebar from './ChatSidebar.svelte';
-
+	
 	let bots: Bot[] = [
 		{
 			name: 'Jack Sparrow',
-			profilePicture: '/echoverse/profile/generic.png'
+			profilePicture: '/echoverse/profile/sparrow.jpg'
 		},
 		{
 			name: 'Oswald Copperpot',
-			profilePicture: '/echoverse/profile/generic.png'
+			profilePicture: '/echoverse/profile/penguin.jpg'
 		}
 	];
 
 	let bot: Bot = bots[0];
 
 	let messages: ChatMessage[] = [
-		{
-			author: $userName,
-			type: 'self',
-			content: 'This is a fake message.',
-			timestamp: new Date(2024, 2, 24, 16, 24, 17)
-		},
-		{
-			author: 'Jack Sparrow',
-			type: 'other',
-			content: 'This is a fake message.',
-			timestamp: new Date(2024, 2, 24, 16, 25, 18)
-		}
 	];
 
-	const handleMessage = ({ detail }: CustomEvent<string>) => {
+	const handleMessage = async ({ detail }: CustomEvent<string>) => {
 		messages = [
 			...messages,
 			{
@@ -59,7 +47,7 @@
 
 		<div class="chat-app">
 			<ChatInfo {bot} />
-			<Messages {messages} />
+			<Messages {messages} {bot} />
 			<MessageEntry on:submitted={handleMessage} />
 		</div>
 	</div>

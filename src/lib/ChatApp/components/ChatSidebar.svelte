@@ -68,6 +68,7 @@
       img {
         width: 2em;
         display: block;
+        border-radius: 50%;
       }
     }
     &-avatar, &-name {

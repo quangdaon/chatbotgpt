@@ -1,10 +1,28 @@
 <script lang="ts">
+	import type { Bot } from '$lib/models/Bot';
 	import type { ChatMessage } from '$lib/models/ChatMessage';
+	import { tick } from 'svelte';
 
 	export let messages: ChatMessage[];
+	export let bot: Bot;
+
+	let messagesElement: HTMLDivElement;
+
+	export const scrollToBottom = () => {
+		messagesElement.scrollTo(0, messagesElement.scrollHeight);
+	};
+
+	$: if (messages && messagesElement) {
+		tick().then(scrollToBottom);
+	}
 </script>
 
-<div class="messages">
+<div class="messages" bind:this={messagesElement}>
+	{#if !messages.length}
+		<div class="message-empty">
+			<p>This is the beginning of your conversation with {bot.name}. Say hello!</p>
+		</div>
+	{/if}
 	{#each messages as message}
 		<div class="message-row">
 			<div class="message message-{message.type}">
@@ -66,5 +84,12 @@
 			margin-top: 1em;
 			white-space: pre-wrap;
 		}
+
+    &-empty {
+      font-style: italic;
+      text-align: center;
+      font-size: 1em;
+      opacity: 0.75;
+    }
 	}
 </style>
