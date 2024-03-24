@@ -1,0 +1,62 @@
+:root {
+	--font-heading: 'Montserrat', sans-serif;
+	--font-body: 'Roboto', sans-serif;
+
+	--color-white: #fbfef9;
+	--color-black: #0c0910;
+	--color-dark: #1f1054;
+	--color-primary: #6341d2;
+	--color-secondary: #4c66cd;
+
+	--color-background: var(--color-dark);
+	--color-foreground: var(--color-white);
+
+  @media only screen and (prefers-color-scheme: light) {
+		--color-background: var(--color-white);
+		--color-foreground: var(--color-black);
+	}
+}
+
+html,
+body {
+	margin: 0;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: var(--font-body);
+	font-size: 18px;
+	color: var(--color-foreground);
+	background-color: var(--color-background);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--font-heading);
+}
+
+button,
+input {
+	font-family: inherit;
+	font-size: inherit;
+	color: currentColor;
+}
+
+button {
+	cursor: pointer;
+}
+
+a,
+a:link,
+a:visited {
+	color: currentColor;
+}

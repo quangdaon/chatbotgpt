@@ -1,0 +1,1 @@
+<a href="/echoverse/about">About</a> | <a href="/echoverse/privacy">Privacy Policy</a>
