@@ -17,7 +17,7 @@ const config = {
 			$data: './src/data'
 		},
 		paths: {
-			base: '/echoverse'
+			assets: '/echoverse'
 		}
 	}
 };
