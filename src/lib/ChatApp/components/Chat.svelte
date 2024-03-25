@@ -8,6 +8,7 @@
 	import { userName } from '$lib/stores/config';
 	import ChatSidebar from './ChatSidebar.svelte';
 	import { onMount } from 'svelte';
+	import ChatWelcome from './ChatWelcome.svelte';
 
 	let bots: Bot[] = [];
 	let bot: Bot;
@@ -50,6 +51,8 @@
 				<ChatInfo {bot} />
 				<Messages {messages} {bot} />
 				<MessageEntry on:submitted={handleMessage} />
+			{:else}
+				<ChatWelcome />
 			{/if}
 		</div>
 	</div>
