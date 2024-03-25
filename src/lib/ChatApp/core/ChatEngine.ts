@@ -20,8 +20,8 @@ export class ChatEngine {
 		this.state.set('ready');
 	}
 
-	async selectBot(bot: Bot) {
-		this.state.set('loading');
+  async selectBot(bot: Bot) {
+    this.state.set('loading');
 
 		const key = await sha256(`${bot.id}_${this.user}`);
 
