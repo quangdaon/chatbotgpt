@@ -13,7 +13,10 @@ export class ChatContext {
 		messagesKey: string,
 		messages: ChatMessage[]
 	) {
-		this.messages = localStorageWritable(messagesKey, messages);
+		this.messages = localStorageWritable(messagesKey, messages, (key, value) => {
+			if (key === 'timestamp') return new Date(value);
+			return value;
+		});
 	}
 
 	addMessage(message: ChatMessage) {
