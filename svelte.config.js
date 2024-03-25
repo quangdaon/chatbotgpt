@@ -14,6 +14,7 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			'~': './src/lib/styles/utils',
+			$data: './src/data'
 		},
 		paths: {
 			base: '/echoverse'

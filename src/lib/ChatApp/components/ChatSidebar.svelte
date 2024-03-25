@@ -1,5 +1,8 @@
 <script lang="ts">
 	import type { Bot } from '$lib/models/Bot';
+	import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
 
 	export let bots: Bot[];
 </script>
@@ -10,7 +13,7 @@
 		<ul class="bots">
 			{#each bots as bot}
 				<li class="bot">
-					<button>
+					<button on:click={() => dispatch('selected', bot)}>
 						<div class="bot-avatar">
 							<img src={bot.profilePicture} alt={bot.name} />
 						</div>

@@ -7,22 +7,22 @@
 	import Messages from './Messages.svelte';
 	import { userName } from '$lib/stores/config';
 	import ChatSidebar from './ChatSidebar.svelte';
-	
-	let bots: Bot[] = [
-		{
-			name: 'Jack Sparrow',
-			profilePicture: '/echoverse/profile/sparrow.jpg'
-		},
-		{
-			name: 'Oswald Copperpot',
-			profilePicture: '/echoverse/profile/penguin.jpg'
-		}
-	];
+	import { onMount } from 'svelte';
 
-	let bot: Bot = bots[0];
+	let bots: Bot[] = [];
+	let bot: Bot;
 
-	let messages: ChatMessage[] = [
-	];
+	let messages: ChatMessage[] = [];
+
+	onMount(async () => {
+		const botsCall = await fetch('/echoverse/api/bots');
+		bots = await botsCall.json();
+	});
+
+	const selectBot = (selectedBot: Bot) => {
+		bot = selectedBot;
+		messages = [];
+	};
 
 	const handleMessage = async ({ detail }: CustomEvent<string>) => {
 		messages = [
@@ -42,13 +42,15 @@
 
 	<div class="body">
 		<div class="sidebar">
-			<ChatSidebar {bots} />
+			<ChatSidebar {bots} on:selected={(evt) => selectBot(evt.detail)} />
 		</div>
 
 		<div class="chat-app">
-			<ChatInfo {bot} />
-			<Messages {messages} {bot} />
-			<MessageEntry on:submitted={handleMessage} />
+			{#if bot}
+				<ChatInfo {bot} />
+				<Messages {messages} {bot} />
+				<MessageEntry on:submitted={handleMessage} />
+			{/if}
 		</div>
 	</div>
 </main>

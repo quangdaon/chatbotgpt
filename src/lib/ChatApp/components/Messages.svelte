@@ -15,12 +15,14 @@
 	$: if (messages && messagesElement) {
 		tick().then(scrollToBottom);
 	}
+
+  $: firstName = bot.name.split(' ')[0];
 </script>
 
 <div class="messages" bind:this={messagesElement}>
 	{#if !messages.length}
 		<div class="message-empty">
-			<p>This is the beginning of your conversation with {bot.name}. Say hello!</p>
+			<p>This is the beginning of your conversation with {firstName}. Say hello!</p>
 		</div>
 	{/if}
 	{#each messages as message}
