@@ -1,3 +1,10 @@
+<script lang="ts">
+	import type { Writable } from 'svelte/store';
+	import type { ChatState } from '../core/ChatEngine';
+
+	export let state: Writable<ChatState>;
+</script>
+
 <div class="chat-welcome">
 	<div class="chat-welcome-content">
 		<h1>
@@ -8,7 +15,11 @@
 			</picture>
 		</h1>
 
-		<p>Start a chat by selecting a user on the left.</p>
+		{#if $state == 'loading'}
+			<h3>Loading...</h3>
+		{:else}
+			<p>Start a chat by selecting a user on the left.</p>
+		{/if}
 	</div>
 </div>
 
@@ -30,10 +41,10 @@
 				}
 			}
 
-      p {
-        font-style: italic;
-        margin-top: 3em;
-      }
+			p {
+				font-style: italic;
+				margin-top: 3em;
+			}
 		}
 	}
 </style>

@@ -1,7 +1,5 @@
 <script lang="ts">
 	import Header from '$lib/layout/Header.svelte';
-	import type { Bot } from '$lib/models/Bot';
-	import type { ChatMessage } from '$lib/models/ChatMessage';
 	import ChatInfo from './ChatInfo.svelte';
 	import MessageEntry from './MessageEntry.svelte';
 	import Messages from './Messages.svelte';
@@ -9,33 +7,28 @@
 	import ChatSidebar from './ChatSidebar.svelte';
 	import { onMount } from 'svelte';
 	import ChatWelcome from './ChatWelcome.svelte';
+	import { ChatEngine } from '../core/ChatEngine';
+	import { readable } from 'svelte/store';
 
-	let bots: Bot[] = [];
-	let bot: Bot;
-
-	let messages: ChatMessage[] = [];
+	const engine = new ChatEngine();
 
 	onMount(async () => {
-		const botsCall = await fetch('/echoverse/api/bots');
-		bots = await botsCall.json();
+		await engine.init();
 	});
 
-	const selectBot = (selectedBot: Bot) => {
-		bot = selectedBot;
-		messages = [];
+	const handleMessage = async ({ detail }: CustomEvent<string>) => {
+		$context?.addMessage({
+			author: $userName,
+			type: 'self',
+			content: detail,
+			timestamp: new Date()
+		});
 	};
 
-	const handleMessage = async ({ detail }: CustomEvent<string>) => {
-		messages = [
-			...messages,
-			{
-				author: $userName,
-				type: 'self',
-				content: detail,
-				timestamp: new Date()
-			}
-		];
-	};
+	$: bots = engine.bots;
+	$: context = engine.activeContext;
+	$: bot = $context?.bot;
+	$: messages = $context?.messages || readable([]);
 </script>
 
 <main class="app">
@@ -43,16 +36,16 @@
 
 	<div class="body">
 		<div class="sidebar">
-			<ChatSidebar {bots} on:selected={(evt) => selectBot(evt.detail)} />
+			<ChatSidebar bots={$bots} on:selected={(evt) => engine.selectBot(evt.detail)} />
 		</div>
 
 		<div class="chat-app">
 			{#if bot}
 				<ChatInfo {bot} />
-				<Messages {messages} {bot} />
+				<Messages messages={$messages} {bot} />
 				<MessageEntry on:submitted={handleMessage} />
 			{:else}
-				<ChatWelcome />
+				<ChatWelcome state={engine.state} />
 			{/if}
 		</div>
 	</div>
