@@ -2,6 +2,7 @@ import type { Bot } from '$lib/models/Bot';
 import { writable } from 'svelte/store';
 import { ChatContext } from './ChatContext';
 import type { ChatMessage } from '$lib/models/ChatMessage';
+import { sha256 } from '$lib/helpers/crypto';
 
 export type ChatState = 'loading' | 'ready';
 
@@ -22,7 +23,7 @@ export class ChatEngine {
 	async selectBot(bot: Bot) {
 		this.state.set('loading');
 
-		const key = `${bot.id}_${this.user}`;
+		const key = await sha256(`${bot.id}_${this.user}`);
 
 		if (!this.contexts[key]) {
 			this.contexts[key] = this.createChatContext(bot, key);
