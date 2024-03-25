@@ -15,9 +15,6 @@ const config = {
 		alias: {
 			'~': './src/lib/styles/utils',
 			$data: './src/data'
-		},
-		paths: {
-			assets: '/echoverse'
 		}
 	}
 };
