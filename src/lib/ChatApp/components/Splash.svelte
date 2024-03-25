@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import FooterLinks from '$lib/layout/FooterLinks.svelte';
 	import { userName } from '$lib/stores/config';
 
@@ -19,7 +20,7 @@
 				<input id="name" type="text" bind:value={inputName} required />
 			</div>
 			<button>
-				<span>Enter the</span> <img src="/echoverse/logo-white.png" alt="EchoVerse" />
+				<span>Enter the</span> <img src="{base}/logo-white.png" alt="EchoVerse" />
 			</button>
 		</form>
 

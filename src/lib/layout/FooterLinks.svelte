@@ -1,1 +1,5 @@
-<a href="/echoverse/about">About</a> | <a href="/echoverse/privacy">Privacy Policy</a>
+<script>
+	import { base } from '$app/paths';
+</script>
+
+<a href="{base}/about">About</a> | <a href="{base}/privacy">Privacy Policy</a>

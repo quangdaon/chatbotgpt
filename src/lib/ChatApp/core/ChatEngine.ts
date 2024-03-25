@@ -3,6 +3,7 @@ import { writable } from 'svelte/store';
 import { ChatContext } from './ChatContext';
 import type { ChatMessage } from '$lib/models/ChatMessage';
 import { sha256 } from '$lib/helpers/crypto';
+import { base } from '$app/paths';
 
 export type ChatState = 'loading' | 'ready';
 
@@ -15,7 +16,7 @@ export class ChatEngine {
 	private contexts: Record<string, ChatContext> = {};
 
 	async init() {
-		const botsCall = await fetch('/echoverse/api/bots');
+		const botsCall = await fetch(`${base}/api/bots`);
 		this.bots.set(await botsCall.json());
 		this.state.set('ready');
 	}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import type { ChatState } from '../core/ChatEngine';
 
 	export let state: ChatState;
@@ -9,8 +10,8 @@
 		<h1>
 			Welcome to the
 			<picture>
-				<source media="(prefers-color-scheme: light)" srcset="/echoverse/logo-color.png" />
-				<img src="/echoverse/logo-white.png" alt="EchoVerse Logo" />
+				<source media="(prefers-color-scheme: light)" srcset="{base}/logo-color.png" />
+				<img src="{base}/logo-white.png" alt="EchoVerse Logo" />
 			</picture>
 		</h1>
 

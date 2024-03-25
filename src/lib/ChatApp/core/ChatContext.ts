@@ -1,3 +1,4 @@
+import { base } from '$app/paths';
 import type { Bot } from '$lib/models/Bot';
 import type { ChatMessage } from '$lib/models/ChatMessage';
 import { localStorageWritable } from '$lib/stores/localStorageWritable';
@@ -22,7 +23,7 @@ export class ChatContext {
       }
       
 			this.abortController = new AbortController();
-			const response = await fetch(`/echoverse/api/completion/${this.bot.id}`, {
+			const response = await fetch(`${base}/api/completion/${this.bot.id}`, {
 				method: 'post',
 				headers: {
 					'Content-Type': 'application/json'

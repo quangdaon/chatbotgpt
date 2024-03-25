@@ -1,4 +1,5 @@
 <script>
+	import { base } from '$app/paths';
 	import { userName } from '$lib/stores/config';
 
 	let menuOpen = false;
@@ -16,7 +17,7 @@
 			{$userName}
 		</div>
 		<div class="avatar">
-			<img src="/echoverse/profile/generic.png" alt={$userName} />
+			<img src="{base}/profile/generic.png" alt={$userName} />
 		</div>
 	</button>
 
@@ -30,10 +31,10 @@
 					<hr />
 				</li>
 				<li>
-					<a href="/echoverse/about">About</a>
+					<a href="{base}/about">About</a>
 				</li>
 				<li>
-					<a href="/echoverse/privacy">Privacy Policy</a>
+					<a href="{base}/privacy">Privacy Policy</a>
 				</li>
 			</ul>
 		</div>

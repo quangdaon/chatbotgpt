@@ -1,12 +1,13 @@
 <script>
+	import { base } from '$app/paths';
 	import { userName } from '$lib/stores/config';
 	import HeaderProfile from './HeaderProfile.svelte';
 </script>
 
 <header class="header">
 	<div class="home">
-		<a href="/echoverse">
-			<img src="/echoverse/logo-white.png" alt="EchoVerse Logo" />
+		<a href="{base}">
+			<img src="{base}/logo-white.png" alt="EchoVerse Logo" />
 		</a>
 	</div>
 
