@@ -1,34 +1,42 @@
 import type { Bot } from '$lib/models/Bot';
 import { writable } from 'svelte/store';
 import { ChatContext } from './ChatContext';
+import type { ChatMessage } from '$lib/models/ChatMessage';
 
 export type ChatState = 'loading' | 'ready';
 
 export class ChatEngine {
-  state = writable<ChatState>('loading');
-  bots = writable<Bot[]>([]);
-  activeBot = writable<Bot | null>(null);
-  activeContext = writable<ChatContext | null>(null);
+	state = writable<ChatState>('loading');
+	bots = writable<Bot[]>([]);
+	user: string = '';
+	activeContext = writable<ChatContext | null>(null);
 
-  private contexts: Record<string, ChatContext> = {};
+	private contexts: Record<string, ChatContext> = {};
 
-  async init() {
+	async init() {
 		const botsCall = await fetch('/echoverse/api/bots');
-    this.bots.set(await botsCall.json());
-    this.state.set('ready');
-  }
+		this.bots.set(await botsCall.json());
+		this.state.set('ready');
+	}
 
-  async selectBot(bot: Bot) {
-    this.activeBot.set(bot);
+	async selectBot(bot: Bot) {
+		this.state.set('loading');
 
-    if (!this.contexts[bot.id]) {
-      this.contexts[bot.id] = this.createChatContext(bot);
-    }
+		const key = `${bot.id}_${this.user}`;
 
-    this.activeContext.set(this.contexts[bot.id]);
-  }
-  
-  private createChatContext(bot: Bot): ChatContext {
-    return new ChatContext(bot);
-  }
+		if (!this.contexts[key]) {
+			this.contexts[key] = this.createChatContext(bot, key);
+		}
+
+		this.activeContext.set(this.contexts[key]);
+		this.state.set('ready');
+	}
+
+	private createChatContext(bot: Bot, key: string): ChatContext {
+		const messagesKey = `chatMessages_${key}`;
+		const savedMessages = localStorage.getItem(messagesKey);
+
+		const messages: ChatMessage[] = savedMessages ? JSON.parse(savedMessages) : [];
+		return new ChatContext(bot, messagesKey, messages);
+	}
 }

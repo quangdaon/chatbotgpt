@@ -28,7 +28,10 @@
 	$: bots = engine.bots;
 	$: context = engine.activeContext;
 	$: bot = $context?.bot;
+	$: state = engine.state;
 	$: messages = $context?.messages || readable([]);
+
+	$: engine.user = $userName;
 </script>
 
 <main class="app">
@@ -40,12 +43,12 @@
 		</div>
 
 		<div class="chat-app">
-			{#if bot}
+			{#if $state === 'ready' && bot}
 				<ChatInfo {bot} />
 				<Messages messages={$messages} {bot} />
 				<MessageEntry on:submitted={handleMessage} />
 			{:else}
-				<ChatWelcome state={engine.state} />
+				<ChatWelcome state={$state} />
 			{/if}
 		</div>
 	</div>
