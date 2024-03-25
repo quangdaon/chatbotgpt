@@ -17,7 +17,8 @@ const config = {
 			$data: './src/data'
 		},
 		paths: {
-			base: '/echoverse'
+			base: process.env['APPLICATION_BASE_PATH'] || '',
+			relative: false
 		}
 	}
 };
