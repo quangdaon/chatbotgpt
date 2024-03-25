@@ -5,6 +5,8 @@ import { writable, type Writable } from 'svelte/store';
 
 export class ChatContext {
 	public messages: Writable<ChatMessage[]>;
+	private abortController: AbortController | null = null;
+
 	constructor(
 		public bot: Bot,
 		messagesKey: string,
@@ -14,6 +16,29 @@ export class ChatContext {
 	}
 
 	addMessage(message: ChatMessage) {
+		const unsubscribe = this.messages.subscribe(async (messages) => {
+			if (this.abortController) {
+				this.abortController.abort();
+      }
+      
+			this.abortController = new AbortController();
+			const response = await fetch(`/echoverse/api/completion/${this.bot.id}`, {
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+        body: JSON.stringify(messages),
+        signal: this.abortController.signal
+			});
+
+      const message: ChatMessage = await response.json();
+      message.timestamp = new Date(message.timestamp);
+
+			this.messages.update((m) => [...m, message]);
+		});
+
 		this.messages.update((m) => [...m, message]);
+
+		unsubscribe();
 	}
 }
