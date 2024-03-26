@@ -25,6 +25,8 @@
 		<a href="https://brandmark.io/">BrandMark</a>. Any affiliation with a real brand is entirely
 		unintentional.
 	</p>
+
+	<p>For more information in the process and technology used to build EchoVerse, stay posted for a blog post on <a href="https://www.quangdao.com/">https://www.quangdao.com/</a>.</p>
 </main>
 
 <Footer />
