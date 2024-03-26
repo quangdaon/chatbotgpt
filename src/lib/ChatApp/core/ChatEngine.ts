@@ -21,8 +21,8 @@ export class ChatEngine {
 		this.state.set('ready');
 	}
 
-  async selectBot(bot: Bot) {
-    this.state.set('loading');
+	async selectBot(bot: Bot) {
+		const loadingTimeout = setTimeout(() => this.state.set('loading'), 50);
 
 		const key = await sha256(`${bot.id}_${this.user}`);
 
@@ -31,6 +31,8 @@ export class ChatEngine {
 		}
 
 		this.activeContext.set(this.contexts[key]);
+
+		clearTimeout(loadingTimeout);
 		this.state.set('ready');
 	}
 

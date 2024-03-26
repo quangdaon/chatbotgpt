@@ -6,7 +6,7 @@
 
 <header class="header">
 	<div class="home">
-		<a href="{base}">
+		<a href="{base || '/'}">
 			<img src="{base}/logo-white.png" alt="EchoVerse Logo" />
 		</a>
 	</div>

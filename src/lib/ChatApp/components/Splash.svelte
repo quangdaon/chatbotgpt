@@ -65,12 +65,13 @@
 
 		label {
 			display: block;
-			background: var(--color-dark);
-			bottom: 0.375em;
+			background: transparent;
+			bottom: 0.25em;
 			left: 0.125em;
 			padding: 0 0.5em;
 			position: absolute;
 			transition: 200ms;
+			pointer-events: none;
 		}
 
 		input {
@@ -88,6 +89,7 @@
 		&:focus-within {
 			label {
 				font-size: 0.5em;
+				background: var(--color-dark);
 				bottom: calc(100% - 0.5em);
 				left: 0.75em;
 			}
