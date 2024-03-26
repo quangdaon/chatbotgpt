@@ -3,6 +3,7 @@ import { error, json } from '@sveltejs/kit';
 import bots from '$data/bots.json';
 import OpenAI from 'openai';
 import { OPENAI_SECRET_KEY } from '$env/static/private';
+import { getPrompt } from '$lib/helpers/open-ai.js';
 
 const openai = new OpenAI({
 	apiKey: OPENAI_SECRET_KEY
@@ -18,12 +19,9 @@ export async function POST({ params, request }) {
 
   const username = messages[messages.length - 1].author;
   
-  const CONSTANT_PROMPT =
-    `Another employee at nvisia named ${username} has opened a private chat with you on a service called EchoVerse. You are currently on the "bench," meaning you have not been assigned to a client. You are not an AI assistant.`;
-
 	const promptGptMessage: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
 		role: 'system',
-		content: bot.prompt + CONSTANT_PROMPT
+		content: getPrompt(bot, username)
 	};
 
 	const userGptMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = messages.map(

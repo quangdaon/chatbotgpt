@@ -1,6 +1,6 @@
 <script>
 	import { base } from '$app/paths';
-	import { userName } from '$lib/stores/config';
+	import { appMode, userName } from '$lib/stores/config';
 
 	let menuOpen = false;
 
@@ -9,6 +9,9 @@
 	};
 
 	let toggleMenu = () => (menuOpen = !menuOpen);
+	let toggleAppMode = () => {
+		$appMode = $appMode === 'dev' ? 'immersive' : 'dev';
+	};
 </script>
 
 <div class="profile">
@@ -24,6 +27,15 @@
 	{#if menuOpen}
 		<div class="menu">
 			<ul>
+				<li>
+					<button on:click|preventDefault={toggleAppMode}>
+						{#if $appMode === 'dev'}
+							Exit Dev Mode
+						{:else}
+							Break Immersion
+						{/if}
+					</button>
+				</li>
 				<li>
 					<button on:click|preventDefault={signOut}>Sign Out</button>
 				</li>
@@ -43,6 +55,7 @@
 
 <style lang="scss">
 	@use '~/breakpoints';
+	@use '~/theme';
 
 	.profile {
 		position: relative;
@@ -83,6 +96,9 @@
 		right: 0;
 		top: 100%;
 		margin-top: 1em;
+		@include theme.light {
+			box-shadow: 0 1em 1em rgba(#000, 0.1);
+		}
 		ul {
 			list-style-type: none;
 			margin: 0;

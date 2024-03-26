@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { appMode } from '$lib/stores/config';
 	import { createEventDispatcher } from 'svelte';
 
 	let message = '';
@@ -28,6 +29,9 @@
 		placeholder="Enter your message"
 	></textarea>
 	<div class="message-entry-control">
+		{#if $appMode === 'dev'}
+			<button type="button" on:click={() => dispatch('reset')}>Reset Bot</button>
+		{/if}
 		<button disabled={!message.trim()}>Send</button>
 	</div>
 </form>
@@ -58,6 +62,7 @@
 			text-align: right;
 			button {
 				background: var(--color-primary);
+				color: var(--color-white);
 				border: none;
 				border-radius: 0.25em;
 				padding: 0.25em;

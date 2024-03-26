@@ -41,6 +41,6 @@ export class ChatEngine {
 		const savedMessages = localStorage.getItem(messagesKey);
 
 		const messages: ChatMessage[] = savedMessages ? JSON.parse(savedMessages) : [];
-		return new ChatContext(bot, messagesKey, messages);
+		return new ChatContext(bot, this.user, messagesKey, messages);
 	}
 }
