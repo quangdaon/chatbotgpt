@@ -9,16 +9,13 @@ const openai = new OpenAI({
 	apiKey: OPENAI_SECRET_KEY
 });
 
-export async function POST({ params, request }) {
-	if (!(params.slug in bots)) {
-		return error(404);
-	}
 
+async function completeChat(request: any, params: any) {
 	const messages: ChatMessage[] = await request.json();
 	const bot = bots[params.slug as keyof typeof bots];
 
-  const username = messages[messages.length - 1].author;
-  
+	const username = messages[messages.length - 1].author;
+
 	const promptGptMessage: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
 		role: 'system',
 		content: getPrompt(bot, username)
@@ -34,7 +31,7 @@ export async function POST({ params, request }) {
 	const gptMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
 		promptGptMessage,
 		...userGptMessages
-  ];
+	];
 
 	const chatCompletion = await openai.chat.completions.create({
 		messages: gptMessages,
@@ -50,6 +47,27 @@ export async function POST({ params, request }) {
 		content: choice.message.content ?? '',
 		type: 'other'
 	};
-
-	return json(message);
+	return message;
 }
+
+export async function POST({ params, request }) {
+	if (!(params.slug in bots)) {
+		return error(404);
+	}
+
+	try {
+		const message: ChatMessage = await completeChat(request, params);
+		return json(message);
+	} catch (e) {
+		const message: ChatMessage = {
+			author: 'SYSTEM',
+			timestamp: new Date(),
+			content: 'This service is currently unavailable. Sorry for the inconvenience!',
+			type: 'other'
+		};
+
+		return json(message);
+	}
+
+}
+
