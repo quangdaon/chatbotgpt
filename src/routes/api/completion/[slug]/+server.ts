@@ -9,7 +9,6 @@ const openai = new OpenAI({
 	apiKey: OPENAI_SECRET_KEY
 });
 
-
 async function completeChat(request: any, params: any) {
 	const messages: ChatMessage[] = await request.json();
 	const bot = bots[params.slug as keyof typeof bots];

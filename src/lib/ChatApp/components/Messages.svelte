@@ -49,12 +49,11 @@
 
 	.message {
 		background: black;
-		flex: 0 0 66%;
+		width: 66%;
 		padding: 1em;
 		border-radius: 1em;
 		&-row {
 			width: 100%;
-			display: flex;
 			margin: 2em 0;
 		}
 
