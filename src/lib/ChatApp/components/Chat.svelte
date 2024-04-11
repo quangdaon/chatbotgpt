@@ -52,11 +52,17 @@
 		<div class="chat-app">
 			{#if $state === 'ready' && bot}
 				<ChatInfo {bot} />
-				{#if $appMode ==='dev'}
+				{#if $appMode === 'dev'}
 					<ChatPrompt prompt={$prompt || ''} />
 				{/if}
 				<Messages messages={$messages} {bot} />
-				<MessageEntry on:submitted={handleMessage} on:reset={resetContext} />
+				<MessageEntry on:submitted={handleMessage} on:reset={resetContext}>
+					<svelte:fragment slot="actions">
+						{#if $appMode === 'dev'}
+							<button type="button" on:click={resetContext}>Reset Bot</button>
+						{/if}
+					</svelte:fragment>
+				</MessageEntry>
 			{:else}
 				<ChatWelcome state={$state} />
 			{/if}

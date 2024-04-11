@@ -28,6 +28,15 @@
 		<div class="menu">
 			<ul>
 				<li>
+					<button on:click|preventDefault={toggleAppMode}>
+						{#if $appMode === 'dev'}
+							Exit Dev Mode
+						{:else}
+							Break Immersion
+						{/if}
+					</button>
+				</li>
+				<li>
 					<button on:click|preventDefault={signOut}>Sign Out</button>
 				</li>
 				<li>

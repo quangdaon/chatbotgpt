@@ -60,6 +60,15 @@ textarea {
 
 button {
 	cursor: pointer;
+	background: var(--color-primary);
+	color: var(--color-white);
+	border: none;
+	border-radius: 0.25em;
+	padding: 0.25em;
+	&:disabled {
+		opacity: 0.5;
+		cursor: default;
+	}
 }
 
 a,

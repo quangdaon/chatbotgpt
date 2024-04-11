@@ -1,9 +1,8 @@
 import { base } from '$app/paths';
 import type { Bot } from '$lib/models/Bot';
 import type { ChatMessage } from '$lib/models/ChatMessage';
-import { userName } from '$lib/stores/config';
 import { localStorageWritable } from '$lib/stores/localStorageWritable';
-import { writable, type Writable } from 'svelte/store';
+import { writable, type Writable, get } from 'svelte/store';
 
 export class ChatContext {
 	public messages: Writable<ChatMessage[]>;
@@ -24,31 +23,28 @@ export class ChatContext {
 		this.loadPrompt();
 	}
 
-	addMessage(message: ChatMessage) {
-		const unsubscribe = this.messages.subscribe(async (messages) => {
-			if (this.abortController) {
-				this.abortController.abort();
-			}
+	async addMessage(userMessage: ChatMessage) {
+		this.messages.update((m) => [...m, userMessage]);
 
-			this.abortController = new AbortController();
-			const response = await fetch(`${base}/api/completion/${this.bot.id}`, {
-				method: 'post',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(messages),
-				signal: this.abortController.signal
-			});
+		const messages = get(this.messages);
+		if (this.abortController) {
+			this.abortController.abort();
+		}
 
-			const message: ChatMessage = await response.json();
-			message.timestamp = new Date(message.timestamp);
-
-			this.messages.update((m) => [...m, message]);
+		this.abortController = new AbortController();
+		const response = await fetch(`${base}/api/completion/${this.bot.id}`, {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(messages),
+			signal: this.abortController.signal
 		});
 
-		this.messages.update((m) => [...m, message]);
+		const responseMessage: ChatMessage = await response.json();
+		responseMessage.timestamp = new Date(responseMessage.timestamp);
 
-		unsubscribe();
+		this.messages.update((m) => [...m, responseMessage]);
 	}
 
 	clear() {

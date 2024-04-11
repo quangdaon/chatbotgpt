@@ -29,9 +29,7 @@
 		placeholder="Enter your message"
 	></textarea>
 	<div class="message-entry-control">
-		{#if $appMode === 'dev'}
-			<button type="button" on:click={() => dispatch('reset')}>Reset Bot</button>
-		{/if}
+		<slot name="actions" />
 		<button disabled={!message.trim()}>Send</button>
 	</div>
 </form>
@@ -60,17 +58,6 @@
 			padding: 0.5em;
 			margin-top: 0.25em;
 			text-align: right;
-			button {
-				background: var(--color-primary);
-				color: var(--color-white);
-				border: none;
-				border-radius: 0.25em;
-				padding: 0.25em;
-				&:disabled {
-					opacity: 0.5;
-					cursor: default;
-				}
-			}
 		}
 	}
 </style>
