@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import ChatHeader from '../ChatHeader.svelte';
-	import type { Bot } from '$lib/models/Bot';
+	import type { BotCustom } from '$lib/models/Bot';
 	const dispatch = createEventDispatcher();
 
-	const bot: Bot = {
+	const bot: BotCustom = {
 		type: 'custom',
 		id: '',
 		name: '',

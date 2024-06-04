@@ -1,5 +1,5 @@
-import type { Bot } from '$lib/models/Bot';
-import { writable } from 'svelte/store';
+import type { Bot, BotCustom } from '$lib/models/Bot';
+import { get, writable } from 'svelte/store';
 import type { ChatContext } from './context/ChatContext';
 import type { ChatMessage } from '$lib/models/ChatMessage';
 import { ChatContextPreset } from './context/ChatContextPreset';
@@ -7,6 +7,7 @@ import { sha256 } from '$lib/helpers/crypto';
 import { base } from '$app/paths';
 import { appState } from '$lib/stores/appState';
 import { ChatContextCustom } from './context/ChatContextCustom';
+import { customBots } from '$lib/stores/bots';
 
 export class ChatEngine {
 	bots = writable<Bot[]>([]);
@@ -17,11 +18,15 @@ export class ChatEngine {
 
 	async init() {
 		const botsCall = await fetch(`${base}/api/bots`);
-		this.bots.set(await botsCall.json());
+		const botsPreset: Bot[] = await botsCall.json();
+
+		this.bots.set(botsPreset.concat(get(customBots)));
+
 		appState.set('chatting');
 	}
 
-	addBot(bot: Bot) {
+	addBot(bot: BotCustom) {
+		customBots.update((bots) => [...bots, bot]);
 		this.bots.update((bots) => [...bots, bot]);
 	}
 
