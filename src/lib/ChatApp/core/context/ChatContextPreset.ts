@@ -1,26 +1,12 @@
 import { base } from '$app/paths';
-import type { Bot } from '$lib/models/Bot';
+import type { BotPreset } from '$lib/models/Bot';
 import type { ChatMessage } from '$lib/models/ChatMessage';
-import { localStorageWritable } from '$lib/stores/localStorageWritable';
-import { writable, type Writable, get } from 'svelte/store';
+import { ChatContext } from './ChatContext';
+import { get } from 'svelte/store';
 
-export class ChatContext {
-	public messages: Writable<ChatMessage[]>;
-	public prompt = writable('');
-	private abortController: AbortController | null = null;
-
-	constructor(
-		public bot: Bot,
-		private user: string,
-		messagesKey: string,
-		messages: ChatMessage[]
-	) {
-		this.messages = localStorageWritable(messagesKey, messages, (key, value) => {
-			if (key === 'timestamp') return new Date(value);
-			return value;
-		});
-
-		this.loadPrompt();
+export class ChatContextPreset extends ChatContext<BotPreset> {
+	constructor(bot: BotPreset, user: string, messagesKey: string, messages: ChatMessage[]) {
+		super(bot, user, messagesKey, messages);
 	}
 
 	async addMessage(userMessage: ChatMessage) {
@@ -47,11 +33,7 @@ export class ChatContext {
 		this.messages.update((m) => [...m, responseMessage]);
 	}
 
-	clear() {
-		this.messages.set([]);
-	}
-
-	private async loadPrompt() {
+	protected async loadPrompt() {
 		const userParam = encodeURIComponent(this.user);
 		const response = await fetch(`${base}/api/bots/${this.bot.id}/prompt?username=${userParam}`);
 		const { prompt } = await response.json();
