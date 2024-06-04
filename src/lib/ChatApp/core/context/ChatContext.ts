@@ -1,7 +1,7 @@
 import type { Bot, BotBase } from '$lib/models/Bot';
 import type { ChatMessage } from '$lib/models/ChatMessage';
 import { localStorageWritable } from '$lib/stores/localStorageWritable';
-import { writable, type Writable } from 'svelte/store';
+import { get, writable, type Writable } from 'svelte/store';
 
 export abstract class ChatContext<TBot extends BotBase> {
 	public messages: Writable<ChatMessage[]>;
@@ -26,7 +26,27 @@ export abstract class ChatContext<TBot extends BotBase> {
 		this.messages.set([]);
 	}
 
-	abstract addMessage(userMessage: ChatMessage): Promise<void>;
+	async addMessage(userMessage: ChatMessage) {
+		this.messages.update((m) => [...m, userMessage]);
+
+		const messages = get(this.messages);
+		if (this.abortController) {
+			this.abortController.abort();
+		}
+
+		this.abortController = new AbortController();
+		const response = await this.postChatCompletion(messages, this.abortController.signal);
+
+		const responseMessage: ChatMessage = await response.json();
+		responseMessage.timestamp = new Date(responseMessage.timestamp);
+
+		this.messages.update((m) => [...m, responseMessage]);
+	}
+
+	protected abstract postChatCompletion(
+		messages: ChatMessage[],
+		signal: AbortSignal
+	): Promise<Response>;
 
 	protected abstract loadPrompt(): void | Promise<void>;
 }

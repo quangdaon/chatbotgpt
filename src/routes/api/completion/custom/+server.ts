@@ -1,17 +1,16 @@
 import type { ChatMessage } from '$lib/models/ChatMessage';
-import { error, json } from '@sveltejs/kit';
-import bots from '$data/bots.json';
+import { json } from '@sveltejs/kit';
 import OpenAI from 'openai';
 import { OPENAI_SECRET_KEY } from '$env/static/private';
 import { getPrompt } from '$lib/helpers/open-ai.js';
+import type { CustomChatCompletionRequest } from '$lib/models/CustomChatCompletionRequest.js';
 
-async function completeChat(request: any, params: any) {
+async function completeChat(request: any) {
 	const openai = new OpenAI({
 		apiKey: OPENAI_SECRET_KEY
 	});
 
-	const messages: ChatMessage[] = await request.json();
-	const bot = bots[params.slug as keyof typeof bots];
+	const { messages, bot }: CustomChatCompletionRequest = await request.json();
 
 	const username = messages[messages.length - 1].author;
 
@@ -41,7 +40,7 @@ async function completeChat(request: any, params: any) {
 	const choice = chatCompletion.choices[0];
 
 	const message: ChatMessage = {
-		author: bot.displayName,
+		author: bot.name,
 		timestamp: new Date(),
 		content: choice.message.content ?? '',
 		type: 'other'
@@ -49,13 +48,9 @@ async function completeChat(request: any, params: any) {
 	return message;
 }
 
-export async function POST({ params, request }) {
-	if (!(params.slug in bots)) {
-		return error(404);
-	}
-
+export async function POST({ request }) {
 	try {
-		const message: ChatMessage = await completeChat(request, params);
+		const message: ChatMessage = await completeChat(request);
 		return json(message);
 	} catch (e) {
 		const message: ChatMessage = {
