@@ -10,6 +10,9 @@
 	import { ChatEngine } from '../core/ChatEngine';
 	import { readable } from 'svelte/store';
 	import ChatPrompt from './ChatPrompt.svelte';
+	import { appState } from '$lib/stores/appState';
+	import CustomBotForm from './Custom/CustomBotForm.svelte';
+	import type { Bot } from '$lib/models/Bot';
 
 	const engine = new ChatEngine();
 
@@ -31,14 +34,21 @@
 		$context?.clear();
 	};
 
+	const addBot = (bot: Bot) => {
+		alert(JSON.stringify(bot));
+	};
+
 	$: bots = engine.bots;
 	$: context = engine.activeContext;
 	$: bot = $context?.bot;
 	$: prompt = $context?.prompt;
-	$: state = engine.state;
 	$: messages = $context?.messages || readable([]);
 
 	$: engine.user = $userName;
+
+	$: if ($appMode === 'immersive' && $appState === 'custom') {
+		$appState = 'chatting';
+	}
 </script>
 
 <main class="app">
@@ -46,11 +56,17 @@
 
 	<div class="body">
 		<div class="sidebar">
-			<ChatSidebar bots={$bots} on:selected={(evt) => engine.selectBot(evt.detail)} />
+			<ChatSidebar
+				bots={$bots}
+				on:selected={(evt) => engine.selectBot(evt.detail)}
+				on:added={() => ($appState = 'custom')}
+			/>
 		</div>
 
 		<div class="chat-app">
-			{#if $state === 'ready' && bot}
+			{#if $appState === 'custom'}
+				<CustomBotForm on:submitted={({ detail }) => addBot(detail)} />
+			{:else if $appState === 'chatting' && bot}
 				<ChatInfo {bot} />
 				{#if $appMode === 'dev'}
 					<ChatPrompt prompt={$prompt || ''} />
@@ -64,7 +80,7 @@
 					</svelte:fragment>
 				</MessageEntry>
 			{:else}
-				<ChatWelcome state={$state} />
+				<ChatWelcome state={$appState} />
 			{/if}
 		</div>
 	</div>

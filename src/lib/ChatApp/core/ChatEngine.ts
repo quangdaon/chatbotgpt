@@ -4,11 +4,9 @@ import { ChatContext } from './ChatContext';
 import type { ChatMessage } from '$lib/models/ChatMessage';
 import { sha256 } from '$lib/helpers/crypto';
 import { base } from '$app/paths';
-
-export type ChatState = 'loading' | 'ready';
+import { appState } from '$lib/stores/appState';
 
 export class ChatEngine {
-	state = writable<ChatState>('loading');
 	bots = writable<Bot[]>([]);
 	user: string = '';
 	activeContext = writable<ChatContext | null>(null);
@@ -18,11 +16,11 @@ export class ChatEngine {
 	async init() {
 		const botsCall = await fetch(`${base}/api/bots`);
 		this.bots.set(await botsCall.json());
-		this.state.set('ready');
+		appState.set('chatting');
 	}
 
 	async selectBot(bot: Bot) {
-		const loadingTimeout = setTimeout(() => this.state.set('loading'), 50);
+		const loadingTimeout = setTimeout(() => appState.set('loading'), 50);
 
 		const key = await sha256(`${bot.id}_${this.user}`);
 
@@ -33,7 +31,7 @@ export class ChatEngine {
 		this.activeContext.set(this.contexts[key]);
 
 		clearTimeout(loadingTimeout);
-		this.state.set('ready');
+		appState.set('chatting');
 	}
 
 	private createChatContext(bot: Bot, key: string): ChatContext {

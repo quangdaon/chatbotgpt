@@ -1,7 +1,5 @@
 import { error, json } from '@sveltejs/kit';
 import bots from '$data/bots.json';
-import type { Bot } from '$lib/models/Bot';
-import { base } from '$app/paths';
 import { getPrompt } from '$lib/helpers/open-ai.js';
 
 export function GET({ params, url }) {

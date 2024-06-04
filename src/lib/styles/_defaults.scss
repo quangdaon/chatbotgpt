@@ -10,6 +10,7 @@
 	--color-dark: #1f1054;
 	--color-mid: #30197b;
 	--color-primary: #6341d2;
+	--color-error: #d24141;
 	--color-secondary: #4c66cd;
 
 	--color-background: var(--color-dark);
@@ -56,6 +57,22 @@ textarea {
 	font-family: inherit;
 	font-size: inherit;
 	color: currentColor;
+}
+
+input,
+textarea {
+	border: 0.25em solid var(--color-primary);
+	border-radius: 1em;
+	background: var(--color-gray);
+	outline: none;
+}
+
+textarea {
+	padding: 1em;
+}
+
+input {
+	padding: 0.25em 1em;
 }
 
 button {
