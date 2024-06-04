@@ -19,6 +19,10 @@ export class ChatEngine {
 		appState.set('chatting');
 	}
 
+	addBot(bot: Bot) {
+		this.bots.update((bots) => [...bots, bot]);
+	}
+
 	async selectBot(bot: Bot) {
 		const loadingTimeout = setTimeout(() => appState.set('loading'), 50);
 

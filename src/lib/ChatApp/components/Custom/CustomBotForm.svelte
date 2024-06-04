@@ -30,8 +30,17 @@
 
 	<div class="field">
 		<label for="bot-profile">Profile Picture URL</label>
-		<input required id="bot-profile" type="text" bind:value={bot.profilePicture} />
+		<input required id="bot-profile" type="url" bind:value={bot.profilePicture} />
 	</div>
+
+	{#if bot.profilePicture}
+		<div>
+			<p>Image Preview:</p>
+			<div class="avatar-preview">
+				<img src={bot.profilePicture} alt="Preview of avatar" />
+			</div>
+		</div>
+	{/if}
 
 	<div class="field">
 		<label for="bot-prompt">Prompt</label>
@@ -55,6 +64,17 @@
 			label {
 				display: block;
 				margin-bottom: 0.5em;
+			}
+		}
+		.avatar-preview {
+			width: 5em;
+			aspect-ratio: 1;
+			border-radius: 50%;
+			overflow: hidden;
+			margin: 1em 0;
+			img {
+				width: 100%;
+				display: block;
 			}
 		}
 	}

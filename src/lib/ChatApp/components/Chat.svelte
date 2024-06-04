@@ -35,7 +35,7 @@
 	};
 
 	const addBot = (bot: Bot) => {
-		alert(JSON.stringify(bot));
+		engine.addBot(bot);
 	};
 
 	$: bots = engine.bots;
