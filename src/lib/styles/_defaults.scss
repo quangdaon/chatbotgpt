@@ -59,7 +59,7 @@ textarea {
 	color: currentColor;
 }
 
-input,
+%inputs-text,
 textarea {
 	border: 0.25em solid var(--color-primary);
 	border-radius: 1em;
@@ -71,7 +71,7 @@ textarea {
 	padding: 1em;
 }
 
-input {
+%inputs-text {
 	padding: 0.25em 1em;
 }
 
