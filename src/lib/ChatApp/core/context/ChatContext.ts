@@ -1,17 +1,16 @@
-import { base } from '$app/paths';
-import type { Bot } from '$lib/models/Bot';
+import type { Bot, BotBase } from '$lib/models/Bot';
 import type { ChatMessage } from '$lib/models/ChatMessage';
 import { localStorageWritable } from '$lib/stores/localStorageWritable';
-import { writable, type Writable, get } from 'svelte/store';
+import { get, writable, type Writable } from 'svelte/store';
 
-export class ChatContext {
+export abstract class ChatContext<TBot extends BotBase> {
 	public messages: Writable<ChatMessage[]>;
 	public prompt = writable('');
-	private abortController: AbortController | null = null;
+	protected abortController: AbortController | null = null;
 
 	constructor(
-		public bot: Bot,
-		private user: string,
+		public bot: TBot,
+		protected user: string,
 		messagesKey: string,
 		messages: ChatMessage[]
 	) {
@@ -23,6 +22,10 @@ export class ChatContext {
 		this.loadPrompt();
 	}
 
+	clear() {
+		this.messages.set([]);
+	}
+
 	async addMessage(userMessage: ChatMessage) {
 		this.messages.update((m) => [...m, userMessage]);
 
@@ -32,14 +35,7 @@ export class ChatContext {
 		}
 
 		this.abortController = new AbortController();
-		const response = await fetch(`${base}/api/completion/${this.bot.id}`, {
-			method: 'post',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(messages),
-			signal: this.abortController.signal
-		});
+		const response = await this.postChatCompletion(messages, this.abortController.signal);
 
 		const responseMessage: ChatMessage = await response.json();
 		responseMessage.timestamp = new Date(responseMessage.timestamp);
@@ -47,15 +43,10 @@ export class ChatContext {
 		this.messages.update((m) => [...m, responseMessage]);
 	}
 
-	clear() {
-		this.messages.set([]);
-	}
+	protected abstract postChatCompletion(
+		messages: ChatMessage[],
+		signal: AbortSignal
+	): Promise<Response>;
 
-	private async loadPrompt() {
-		const userParam = encodeURIComponent(this.user);
-		const response = await fetch(`${base}/api/bots/${this.bot.id}/prompt?username=${userParam}`);
-		const { prompt } = await response.json();
-
-		this.prompt.set(prompt);
-	}
+	protected abstract loadPrompt(): void | Promise<void>;
 }

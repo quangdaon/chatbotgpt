@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import type { ChatState } from '../core/ChatEngine';
+	import type { AppState } from '$lib/stores/appState';
 
-	export let state: ChatState;
+	export let state: AppState;
 </script>
 
 <div class="chat-welcome">

@@ -43,13 +43,9 @@
 			display: block;
 			width: 100%;
 			resize: none;
-			background: var(--color-gray);
-			border: none;
 			min-height: 4em;
 			padding: 1em;
 			margin: 0;
-			border-radius: 1em;
-			border: 0.25em solid var(--color-primary);
 			&:focus {
 				outline: none;
 			}

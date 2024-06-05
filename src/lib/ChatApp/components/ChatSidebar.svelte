@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Bot } from '$lib/models/Bot';
+	import { appMode } from '$lib/stores/config';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
@@ -25,6 +26,18 @@
 					</button>
 				</li>
 			{/each}
+			{#if $appMode === 'dev'}
+				<li class="bot">
+					<button on:click={() => dispatch('added')}>
+						<div class="bot-avatar">
+							<span>+</span>
+						</div>
+						<div class="bot-name">
+							<span>Create Bot</span>
+						</div>
+					</button>
+				</li>
+			{/if}
 		</ul>
 	</details>
 </div>
@@ -73,10 +86,17 @@
 		}
 		&-avatar {
 			flex: 0 0 auto;
+			background: rgba(#000, 0.2);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 2em;
+			aspect-ratio: 1;
+			border-radius: 50%;
+			overflow: hidden;
 			img {
-				width: 2em;
 				display: block;
-				border-radius: 50%;
+				width: 100%;
 			}
 		}
 		&-name {

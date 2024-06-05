@@ -1,25 +1,23 @@
 <script lang="ts">
 	import type { Bot } from '$lib/models/Bot';
+	import ChatHeader from './ChatHeader.svelte';
 
 	export let bot: Bot;
 </script>
 
-<div class="chat-info">
+<ChatHeader>
 	<h1 class="chat-info-name">
 		<div class="chat-info-avatar">
 			<img src={bot.profilePicture} alt="{bot.name} Avatar" />
 		</div>
 		{bot.name}
 	</h1>
-</div>
+</ChatHeader>
 
 <style lang="scss">
 	@use '~/theme';
 
 	.chat-info {
-		padding: 1em;
-		box-shadow: 0 1em 2em rgba(#000, 0.2);
-		flex: 0 0 auto;
 		&-avatar {
 			display: inline-block;
 			vertical-align: middle;
@@ -27,15 +25,11 @@
 			img {
 				display: block;
 				width: 2em;
-        border-radius: 50%;
+				border-radius: 50%;
 			}
 		}
 		&-name {
 			margin: 0;
-		}
-		@include theme.light {
-			background: var(--color-gray);
-			box-shadow: none;
 		}
 	}
 </style>

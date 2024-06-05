@@ -1,28 +1,37 @@
-import type { Bot } from '$lib/models/Bot';
-import { writable } from 'svelte/store';
-import { ChatContext } from './ChatContext';
+import type { Bot, BotCustom } from '$lib/models/Bot';
+import { get, writable } from 'svelte/store';
+import type { ChatContext } from './context/ChatContext';
 import type { ChatMessage } from '$lib/models/ChatMessage';
+import { ChatContextPreset } from './context/ChatContextPreset';
 import { sha256 } from '$lib/helpers/crypto';
 import { base } from '$app/paths';
-
-export type ChatState = 'loading' | 'ready';
+import { appState } from '$lib/stores/appState';
+import { ChatContextCustom } from './context/ChatContextCustom';
+import { customBots } from '$lib/stores/bots';
 
 export class ChatEngine {
-	state = writable<ChatState>('loading');
 	bots = writable<Bot[]>([]);
 	user: string = '';
-	activeContext = writable<ChatContext | null>(null);
+	activeContext = writable<ChatContext<Bot> | null>(null);
 
-	private contexts: Record<string, ChatContext> = {};
+	private contexts: Record<string, ChatContext<Bot>> = {};
 
 	async init() {
 		const botsCall = await fetch(`${base}/api/bots`);
-		this.bots.set(await botsCall.json());
-		this.state.set('ready');
+		const botsPreset: Bot[] = await botsCall.json();
+
+		this.bots.set(botsPreset.concat(get(customBots)));
+
+		appState.set('chatting');
+	}
+
+	addBot(bot: BotCustom) {
+		customBots.update((bots) => [...bots, bot]);
+		this.bots.update((bots) => [...bots, bot]);
 	}
 
 	async selectBot(bot: Bot) {
-		const loadingTimeout = setTimeout(() => this.state.set('loading'), 50);
+		const loadingTimeout = setTimeout(() => appState.set('loading'), 50);
 
 		const key = await sha256(`${bot.id}_${this.user}`);
 
@@ -33,14 +42,16 @@ export class ChatEngine {
 		this.activeContext.set(this.contexts[key]);
 
 		clearTimeout(loadingTimeout);
-		this.state.set('ready');
+		appState.set('chatting');
 	}
 
-	private createChatContext(bot: Bot, key: string): ChatContext {
+	private createChatContext(bot: Bot, key: string): ChatContext<Bot> {
 		const messagesKey = `chatMessages_${key}`;
 		const savedMessages = localStorage.getItem(messagesKey);
 
 		const messages: ChatMessage[] = savedMessages ? JSON.parse(savedMessages) : [];
-		return new ChatContext(bot, this.user, messagesKey, messages);
+		return bot.type === 'custom'
+			? new ChatContextCustom(bot, this.user, messagesKey, messages)
+			: new ChatContextPreset(bot, this.user, messagesKey, messages);
 	}
 }
