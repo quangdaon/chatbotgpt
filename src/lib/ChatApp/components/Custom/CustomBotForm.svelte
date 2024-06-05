@@ -14,8 +14,11 @@
 
 	const submit = () => {
 		bot.id = crypto.randomUUID();
+		if (!bot.prompt) bot.prompt = tempPrompt;
 		dispatch('submitted', bot);
 	};
+
+	$: tempPrompt = bot.name ? `You are ${bot.name}.` : '';
 </script>
 
 <ChatHeader>
@@ -44,7 +47,8 @@
 
 	<div class="field">
 		<label for="bot-prompt">Prompt</label>
-		<textarea required name="bot-prompt" id="bot-prompt" bind:value={bot.prompt}></textarea>
+		<textarea name="bot-prompt" id="bot-prompt" placeholder={tempPrompt} bind:value={bot.prompt}
+		></textarea>
 	</div>
 
 	<div>
@@ -64,6 +68,12 @@
 			label {
 				display: block;
 				margin-bottom: 0.5em;
+			}
+			textarea {
+				min-width: 300px;
+				min-height: 300px;
+				width: 800px;
+				max-width: min(800px, 90%);
 			}
 		}
 		.avatar-preview {
