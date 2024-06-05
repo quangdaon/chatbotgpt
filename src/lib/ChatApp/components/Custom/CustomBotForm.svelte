@@ -4,6 +4,8 @@
 	import type { BotCustom } from '$lib/models/Bot';
 	const dispatch = createEventDispatcher();
 
+	let imgPreview: HTMLImageElement;
+
 	const bot: BotCustom = {
 		type: 'custom',
 		id: '',
@@ -15,8 +17,22 @@
 	const submit = () => {
 		bot.id = crypto.randomUUID();
 		if (!bot.prompt) bot.prompt = tempPrompt;
+		bot.profilePicture = getBase64Image();
 		dispatch('submitted', bot);
 	};
+
+	function getBase64Image() {
+		var canvas = document.createElement('canvas');
+		canvas.width = 128;
+		canvas.height = imgPreview.height * (128 / imgPreview.width);
+
+		var ctx = canvas.getContext('2d');
+		ctx?.drawImage(imgPreview, 0, 0, canvas.width, canvas.height);
+
+		var dataURL = canvas.toDataURL('image/png');
+
+		return dataURL;
+	}
 
 	$: tempPrompt = bot.name ? `You are ${bot.name}.` : '';
 </script>
@@ -40,7 +56,12 @@
 		<div>
 			<p>Image Preview:</p>
 			<div class="avatar-preview">
-				<img src={bot.profilePicture} alt="Preview of avatar" />
+				<img
+					bind:this={imgPreview}
+					src={bot.profilePicture}
+					alt="Preview of avatar"
+					crossOrigin="anonymous"
+				/>
 			</div>
 		</div>
 	{/if}
