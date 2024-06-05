@@ -1,5 +1,6 @@
 <script>
 	import { base } from '$app/paths';
+	import { clickOutside } from '$lib/directives/clickOutside';
 	import { appMode, userName } from '$lib/stores/config';
 
 	let menuOpen = false;
@@ -25,7 +26,7 @@
 	</button>
 
 	{#if menuOpen}
-		<div class="menu">
+		<div class="menu" use:clickOutside on:click_outside={() => menuOpen = false}>
 			<ul>
 				<li>
 					<button on:click|preventDefault={toggleAppMode}>
