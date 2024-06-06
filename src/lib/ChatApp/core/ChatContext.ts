@@ -1,15 +1,18 @@
-import type { Bot, BotBase } from '$lib/models/Bot';
+import { base } from '$app/paths';
+import { getPrompt } from '$lib/helpers/open-ai';
+import type { Bot } from '$lib/models/Bot';
 import type { ChatMessage } from '$lib/models/ChatMessage';
+import type { ChatCompletionRequest } from '$lib/models/ChatCompletionRequest';
 import { localStorageWritable } from '$lib/stores/localStorageWritable';
 import { get, writable, type Writable } from 'svelte/store';
 
-export abstract class ChatContext<TBot extends BotBase> {
+export class ChatContext {
 	public messages: Writable<ChatMessage[]>;
 	public prompt = writable('');
 	protected abortController: AbortController | null = null;
 
 	constructor(
-		public bot: TBot,
+		public bot: Bot,
 		protected user: string,
 		messagesKey: string,
 		messages: ChatMessage[]
@@ -19,7 +22,7 @@ export abstract class ChatContext<TBot extends BotBase> {
 			return value;
 		});
 
-		this.loadPrompt();
+		this.prompt.set(getPrompt(this.bot, this.user));
 	}
 
 	clear() {
@@ -43,10 +46,19 @@ export abstract class ChatContext<TBot extends BotBase> {
 		this.messages.update((m) => [...m, responseMessage]);
 	}
 
-	protected abstract postChatCompletion(
-		messages: ChatMessage[],
-		signal: AbortSignal
-	): Promise<Response>;
-
-	protected abstract loadPrompt(): void | Promise<void>;
+	private async postChatCompletion(messages: ChatMessage[], signal: AbortSignal) {
+		const request: ChatCompletionRequest = {
+			bot: this.bot,
+			messages
+    };
+    
+		return await fetch(`${base}/api/completion`, {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(request),
+			signal
+		});
+	}
 }

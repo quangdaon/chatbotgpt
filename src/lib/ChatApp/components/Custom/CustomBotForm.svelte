@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import ChatHeader from '../ChatHeader.svelte';
-	import type { BotCustom } from '$lib/models/Bot';
+	import type { Bot } from '$lib/models/Bot';
 	const dispatch = createEventDispatcher();
 
 	let imgPreview: HTMLImageElement;
@@ -12,17 +12,8 @@
 	let botPrompt: string;
 	let useUpload = true;
 
-	const bot: BotCustom = {
-		type: 'custom',
-		id: '',
-		name: '',
-		profilePicture: '',
-		prompt: ''
-	};
-
 	const submit = () => {
-		const bot: BotCustom = {
-			type: 'custom',
+		const bot: Bot = {
 			id: crypto.randomUUID(),
 			name: botName,
 			profilePicture: getBase64Image(),

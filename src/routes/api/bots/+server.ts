@@ -4,12 +4,12 @@ import type { Bot } from '$lib/models/Bot';
 import { base } from '$app/paths';
 
 export function GET() {
-  const response: Bot[] = Object.entries(bots).map(([id, bot]) => ({
-    type: 'preset',
-    id,
+	const response: Bot[] = Object.entries(bots).map(([id, bot]) => ({
+		id,
 		name: bot.displayName,
-		profilePicture: `${base}/profile/${id}.jpg`
-  }));
-  
+		profilePicture: `${base}/profile/${id}.jpg`,
+		prompt: bot.prompt
+	}));
+
 	return json(response);
 }
