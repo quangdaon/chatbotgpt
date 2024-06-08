@@ -6,25 +6,30 @@ import { sha256 } from '$lib/helpers/crypto';
 import { base } from '$app/paths';
 import { appState } from '$lib/stores/appState';
 import { customBots } from '$lib/stores/bots';
+import { localStorageWritable } from '$lib/stores/localStorageWritable';
 
 export class ChatEngine {
-	bots = writable<Bot[]>([]);
+	bots = localStorageWritable<Bot[]>('ALL_BOTS', []);
 	user: string = '';
 	activeContext = writable<ChatContext | null>(null);
 
 	private contexts: Record<string, ChatContext> = {};
 
 	async init() {
-		const botsCall = await fetch(`${base}/api/bots`);
-		const botsPreset: Bot[] = await botsCall.json();
-
-		this.bots.set(botsPreset.concat(get(customBots)));
-
+		await this.loadBots();
 		appState.set('chatting');
 	}
 
+	async loadBots() {
+		if (get(this.bots).length > 0) return;
+
+		const botsCall = await fetch(`${base}/api/bots`);
+		const botsPreset: Bot[] = await botsCall.json();
+
+		this.bots.set(botsPreset);
+	}
+
 	addBot(bot: Bot) {
-		customBots.update((bots) => [...bots, bot]);
 		this.bots.update((bots) => [...bots, bot]);
 	}
 
