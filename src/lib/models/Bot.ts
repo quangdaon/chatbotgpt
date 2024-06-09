@@ -3,4 +3,5 @@ export interface Bot {
   name: string;
   profilePicture: string;
   prompt: string;
+  model?: string;
 }

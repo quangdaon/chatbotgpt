@@ -8,7 +8,8 @@ export function GET() {
 		id,
 		name: bot.displayName,
 		profilePicture: `${base}/profile/${id}.jpg`,
-		prompt: bot.prompt
+		prompt: bot.prompt,
+		model: bot.model ?? ''
 	}));
 
 	return json(response);
