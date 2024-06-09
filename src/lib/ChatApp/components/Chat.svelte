@@ -43,6 +43,7 @@
 	$: bot = $context?.bot;
 	$: prompt = $context?.prompt;
 	$: messages = $context?.messages || readable([]);
+	$: downloadHref = 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify($messages))
 
 	$: engine.user = $userName;
 
@@ -75,6 +76,7 @@
 				<MessageEntry on:submitted={handleMessage} on:reset={resetContext}>
 					<svelte:fragment slot="actions">
 						{#if $appMode === 'dev'}
+							<a class="button" href={downloadHref} type="application/json" download>Export JSON</a>
 							<button type="button" on:click={resetContext}>Reset Bot</button>
 						{/if}
 					</svelte:fragment>
