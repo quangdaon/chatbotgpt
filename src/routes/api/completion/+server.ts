@@ -3,14 +3,14 @@ import { json } from '@sveltejs/kit';
 import OpenAI from 'openai';
 import { OPENAI_SECRET_KEY } from '$env/static/private';
 import { getPrompt } from '$lib/helpers/open-ai.js';
-import type { CustomChatCompletionRequest } from '$lib/models/CustomChatCompletionRequest.js';
+import type { ChatCompletionRequest } from '$lib/models/ChatCompletionRequest.js';
 
 async function completeChat(request: any) {
 	const openai = new OpenAI({
 		apiKey: OPENAI_SECRET_KEY
 	});
 
-	const { messages, bot }: CustomChatCompletionRequest = await request.json();
+	const { messages, bot }: ChatCompletionRequest = await request.json();
 
 	const username = messages[messages.length - 1].author;
 

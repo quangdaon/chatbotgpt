@@ -1,4 +1,4 @@
-import type { BotCustom } from '$lib/models/Bot';
+import type { Bot } from '$lib/models/Bot';
 import { localStorageWritable } from './localStorageWritable';
 
-export const customBots = localStorageWritable<BotCustom[]>('CUSTOM_BOTS', []);
+export const customBots = localStorageWritable<Bot[]>('CUSTOM_BOTS', []);

@@ -12,7 +12,7 @@
 	import ChatPrompt from './ChatPrompt.svelte';
 	import { appState } from '$lib/stores/appState';
 	import CustomBotForm from './Custom/CustomBotForm.svelte';
-	import type { Bot, BotCustom } from '$lib/models/Bot';
+	import type { Bot } from '$lib/models/Bot';
 
 	const engine = new ChatEngine();
 
@@ -34,7 +34,7 @@
 		$context?.clear();
 	};
 
-	const addBot = (bot: BotCustom) => {
+	const addBot = (bot: Bot) => {
 		engine.addBot(bot);
 	};
 
