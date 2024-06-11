@@ -55,5 +55,8 @@
 			margin-top: 0.25em;
 			text-align: right;
 		}
+		@media print {
+			display: none;
+		}
 	}
 </style>

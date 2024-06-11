@@ -94,12 +94,13 @@
 	</div>
 </main>
 
-<style>
+<style lang="scss">
 	.app {
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
 	}
+
 	.app :global(.header) {
 		flex: 0 0 auto;
 	}
@@ -111,6 +112,11 @@
 
 	.sidebar {
 		flex: 0 0 20%;
+
+		@media print {
+			display: none;
+			flex: 0;
+		}
 	}
 
 	.chat-app {
@@ -119,5 +125,9 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: stretch;
+
+		@media print {
+			width: 100%;
+		}
 	}
 </style>
