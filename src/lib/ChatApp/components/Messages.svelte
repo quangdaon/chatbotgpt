@@ -16,7 +16,7 @@
 		tick().then(scrollToBottom);
 	}
 
-  $: firstName = bot.name.split(' ')[0];
+	$: firstName = bot.name.split(' ')[0];
 </script>
 
 <div class="messages" bind:this={messagesElement}>
@@ -44,7 +44,10 @@
 	.messages {
 		padding: 1em;
 		flex: 1 1 0;
-		overflow-y: scroll;
+
+		@media only screen {
+			overflow-y: scroll;
+		}
 	}
 
 	.message {
@@ -52,19 +55,37 @@
 		width: 66%;
 		padding: 1em;
 		border-radius: 1em;
+
+		@media print {
+			width: 90%;
+			background-color: transparent;
+			padding: 0;
+		}
+
 		&-row {
 			width: 100%;
 			margin: 2em 0;
+
+			@media print {
+				margin: 1em 0;
+			}
 		}
 
 		&-other {
 			background: var(--color-gray);
+			@media print {
+				background-color: transparent;
+			}
 		}
 
 		&-self {
 			margin-left: auto;
 			background: var(--color-primary);
 			color: var(--color-white);
+			@media print {
+				text-align: right;
+				background-color: transparent;
+			}
 		}
 
 		&-info {
@@ -84,13 +105,17 @@
 		&-content {
 			margin-top: 1em;
 			white-space: pre-wrap;
+
+			@media print {
+				margin-top: 0;
+			}
 		}
 
-    &-empty {
-      font-style: italic;
-      text-align: center;
-      font-size: 1em;
-      opacity: 0.75;
-    }
+		&-empty {
+			font-style: italic;
+			text-align: center;
+			font-size: 1em;
+			opacity: 0.75;
+		}
 	}
 </style>
