@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import ChatHeader from '../ChatHeader.svelte';
 	import type { Bot } from '$lib/models/Bot';
+	import { base } from '$app/paths';
 	const dispatch = createEventDispatcher();
 
 	let imgPreview: HTMLImageElement;
@@ -10,13 +11,24 @@
 	let botName: string;
 	let botAvatarUrl: string;
 	let botPrompt: string;
+	let botModels: string[];
+	let botModel: string;
 	let useUpload = true;
+	let loading = true;
+
+	onMount(async () => {
+		const resp = await fetch(`${base}/api/models`);
+		botModels = await resp.json();
+		botModel = 'gpt-3.5-turbo';
+		loading = false;
+	});
 
 	const submit = () => {
 		const bot: Bot = {
 			id: crypto.randomUUID(),
 			name: botName,
 			profilePicture: getBase64Image(),
+			model: botModel,
 			prompt: botPrompt
 		};
 
@@ -79,7 +91,7 @@
 				accept="image/*"
 			/>
 			<div class="avatar-toggle">
-				<button on:click={() => useUpload = false}>Enter URL Instead</button>
+				<button on:click={() => (useUpload = false)}>Enter URL Instead</button>
 			</div>
 		</div>
 	{:else}
@@ -87,7 +99,7 @@
 			<label for="bot-profile">Profile Picture URL</label>
 			<input required id="bot-profile" type="url" bind:value={botAvatarUrl} />
 			<div class="avatar-toggle">
-				<button on:click={() => useUpload = true}>Upload Image Instead</button>
+				<button on:click={() => (useUpload = true)}>Upload Image Instead</button>
 			</div>
 		</div>
 	{/if}
@@ -106,14 +118,24 @@
 		</div>
 	{/if}
 
+	{#if botModels?.length}
+		<div class="field">
+			<label for="bot-model">Model</label>
+			<select name="bot-model" id="bot-model" bind:value={botModel}>
+				{#each botModels as model}
+					<option>{model}</option>
+				{/each}
+			</select>
+		</div>
+	{/if}
+
 	<div class="field">
 		<label for="bot-prompt">Prompt</label>
-		<textarea name="bot-prompt" id="bot-prompt" placeholder={tempPrompt} bind:value={botPrompt}
-		></textarea>
+		<textarea name="bot-prompt" id="bot-prompt" placeholder={tempPrompt} bind:value={botPrompt} />
 	</div>
 
 	<div>
-		<button type="submit">Do the Magic</button>
+		<button type="submit" disabled={loading}>Do the Magic</button>
 	</div>
 </form>
 
