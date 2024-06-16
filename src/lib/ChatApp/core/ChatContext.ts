@@ -5,6 +5,8 @@ import type { ChatMessage } from '$lib/models/ChatMessage';
 import type { ChatCompletionRequest } from '$lib/models/ChatCompletionRequest';
 import { localStorageWritable } from '$lib/stores/localStorageWritable';
 import { get, writable, type Writable } from 'svelte/store';
+import { openAiKey } from '$lib/stores/config';
+import { PUBLIC_OPENAI_SECRET_KEY_HEADER } from '$env/static/public';
 
 export class ChatContext {
 	public messages: Writable<ChatMessage[]>;
@@ -55,7 +57,8 @@ export class ChatContext {
 		return await fetch(`${base}/api/completion`, {
 			method: 'post',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				[PUBLIC_OPENAI_SECRET_KEY_HEADER]: get(openAiKey)
 			},
 			body: JSON.stringify(request),
 			signal

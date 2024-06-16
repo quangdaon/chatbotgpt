@@ -3,6 +3,8 @@
 	import ChatHeader from '../ChatHeader.svelte';
 	import type { Bot } from '$lib/models/Bot';
 	import { base } from '$app/paths';
+	import { openAiKey } from '$lib/stores/config';
+	import { PUBLIC_OPENAI_SECRET_KEY_HEADER } from '$env/static/public';
 	const dispatch = createEventDispatcher();
 
 	let imgPreview: HTMLImageElement;
@@ -17,7 +19,11 @@
 	let loading = true;
 
 	onMount(async () => {
-		const resp = await fetch(`${base}/api/models`);
+		const resp = await fetch(`${base}/api/models`, {
+			headers: {
+				[PUBLIC_OPENAI_SECRET_KEY_HEADER]: $openAiKey
+			}
+		});
 		botModels = await resp.json();
 		botModel = 'gpt-3.5-turbo';
 		loading = false;
