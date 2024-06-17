@@ -152,19 +152,6 @@
 
 	.form {
 		padding: 1em;
-		.field {
-			margin-bottom: 1em;
-			label {
-				display: block;
-				margin-bottom: 0.5em;
-			}
-			textarea {
-				min-width: 300px;
-				min-height: 300px;
-				width: 800px;
-				max-width: min(800px, 90%);
-			}
-		}
 		.avatar-toggle {
 			margin-top: 1em;
 		}

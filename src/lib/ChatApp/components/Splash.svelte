@@ -69,6 +69,7 @@
 			bottom: 0.25em;
 			left: 0.125em;
 			padding: 0 0.5em;
+			margin-bottom: 0;
 			position: absolute;
 			transition: 200ms;
 			pointer-events: none;
