@@ -5,7 +5,7 @@
 	import Messages from './Messages.svelte';
 	import { appMode, userName } from '$lib/stores/config';
 	import ChatSidebar from './ChatSidebar.svelte';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import ChatWelcome from './ChatWelcome.svelte';
 	import { ChatEngine } from '../core/ChatEngine';
 	import { readable } from 'svelte/store';
@@ -15,6 +15,8 @@
 	import type { Bot } from '$lib/models/Bot';
 
 	const engine = new ChatEngine();
+	let customBotForm: CustomBotForm;
+	let botToEdit: Bot | null = null;
 
 	onMount(async () => {
 		await engine.init();
@@ -36,6 +38,13 @@
 
 	const addBot = (bot: Bot) => {
 		engine.addBot(bot);
+	};
+
+	const editBot = async (bot: Bot | null = null) => {
+		botToEdit = bot;
+		$appState = 'custom';
+		await tick();
+		customBotForm.resetBotData(bot);
 	};
 
 	$: bots = engine.bots;
@@ -62,14 +71,15 @@
 				bots={$bots}
 				on:selected={(evt) => engine.selectBot(evt.detail)}
 				on:deleted={(evt) => engine.deleteBot(evt.detail)}
-				on:resetted={(evt) => engine.resetBots()}
-				on:added={() => ($appState = 'custom')}
+				on:editted={(evt) => editBot(evt.detail)}
+				on:resetted={() => engine.resetBots()}
+				on:added={() => editBot()}
 			/>
 		</div>
 
 		<div class="chat-app">
 			{#if $appState === 'custom'}
-				<CustomBotForm on:submitted={({ detail }) => addBot(detail)} />
+				<CustomBotForm bind:this={customBotForm} on:submitted={({ detail }) => addBot(detail)} />
 			{:else if $appState === 'chatting' && bot}
 				<ChatInfo {bot} />
 				{#if $appMode === 'dev'}

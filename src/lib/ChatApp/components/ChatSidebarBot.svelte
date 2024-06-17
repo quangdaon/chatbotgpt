@@ -34,7 +34,12 @@
 		{#if menuOpen}
 			<div class="bot-menu" use:clickOutside on:click_outside={() => (menuOpen = false)}>
 				<ul>
-					<button on:click={() => dispatch('deleted', bot)}>Delete</button>
+					<li>
+						<button on:click={() => dispatch('editted', bot)}>Edit</button>
+					</li>
+					<li>
+						<button on:click={() => dispatch('deleted', bot)}>Delete</button>
+					</li>
 				</ul>
 			</div>
 		{/if}
@@ -104,6 +109,25 @@
 			z-index: 2;
 			right: 0.5em;
 			top: calc(100% - 0.5em);
+			ul {
+				list-style-type: none;
+        background: var(--color-primary);
+        padding: 0;
+        border-radius: 0.5em;
+        overflow: hidden;
+				li {
+					margin: 0;
+					button {
+						border-radius: 0;
+            text-align: left;
+            width: 100%;
+            padding: 0.5em;
+						&:hover {
+							background: rgba(#000, 0.1);
+						}
+					}
+				}
+			}
 		}
 	}
 </style>

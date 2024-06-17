@@ -15,7 +15,7 @@
 		<ul class="bots">
 			{#each bots as bot}
 				<li class="bot">
-					<ChatSidebarBot {bot} on:selected on:deleted />
+					<ChatSidebarBot {bot} on:selected on:editted on:deleted />
 				</li>
 			{/each}
 			{#if $appMode === 'dev'}

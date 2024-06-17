@@ -23,10 +23,16 @@ export class ChatEngine {
 	async loadBots() {
 		if (get(this.bots).length > 0) return;
 
-		await this.resetBots();
+		await this.loadDefaultBots();
 	}
 
 	async resetBots() {
+		if (!confirm('Are you sure?')) return;
+		await this.loadDefaultBots();
+		alert('Done.');
+	}
+
+	async loadDefaultBots() {
 		const botsCall = await fetch(`${base}/api/bots`);
 		const botsPreset: Bot[] = await botsCall.json();
 
@@ -34,14 +40,18 @@ export class ChatEngine {
 	}
 
 	addBot(bot: Bot) {
-		this.bots.update((bots) => [...bots, bot]);
+		this.bots.update((bots) => {
+			return bots.find((e) => e.id === bot.id)
+				? bots.map((e) => (e.id === bot.id ? bot : e))
+				: [...bots, bot];
+		});
 	}
 
 	deleteBot(bot: Bot): void {
 		this.bots.update((bots) => bots.filter((e) => e.id !== bot.id));
 
 		if (bot.id === get(this.activeContext)?.bot.id) {
-			this.activeContext.set(null)
+			this.activeContext.set(null);
 		}
 	}
 

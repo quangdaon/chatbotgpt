@@ -7,15 +7,18 @@
 	import { PUBLIC_OPENAI_SECRET_KEY_HEADER } from '$env/static/public';
 	const dispatch = createEventDispatcher();
 
+	const defaultBotModel = 'gpt-3.5-turbo';
+
 	let imgPreview: HTMLImageElement;
 	let upload: HTMLInputElement;
 
+	let botId: string = crypto.randomUUID();
 	let botName: string;
 	let botAvatarUrl: string;
 	let botPrompt: string;
 	let botModels: string[];
 	let botModel: string;
-	let useUpload = true;
+	let useUpload = false;
 	let loading = true;
 
 	onMount(async () => {
@@ -25,13 +28,13 @@
 			}
 		});
 		botModels = await resp.json();
-		botModel = 'gpt-3.5-turbo';
+		botModel = botModel || defaultBotModel;
 		loading = false;
 	});
 
 	const submit = () => {
 		const bot: Bot = {
-			id: crypto.randomUUID(),
+			id: botId,
 			name: botName,
 			profilePicture: getBase64Image(),
 			model: botModel,
@@ -72,6 +75,16 @@
 			return;
 		}
 	}
+
+	export const resetBotData = (botIn: Bot | null = null) => {
+		botId = botIn?.id ?? crypto.randomUUID();
+		botName = botIn?.name ?? '';
+		botAvatarUrl = botIn?.profilePicture ?? '';
+		botPrompt = botIn?.prompt ?? '';
+		botModel = botIn?.model || defaultBotModel;
+
+		useUpload = !botIn;
+	};
 
 	$: tempPrompt = botName ? `You are ${botName}.` : '';
 </script>
