@@ -1,11 +1,15 @@
 @mixin dark {
-  @media only screen and (prefers-color-scheme: dark) {
-    @content;
-  }
+	@media only screen and (prefers-color-scheme: dark) {
+		@content;
+	}
 }
 
 @mixin light {
-  @media only screen and (prefers-color-scheme: light) {
-    @content;
-  }
+	@media only screen and (prefers-color-scheme: light) {
+		@content;
+	}
+  
+	@media print {
+		@content;
+	}
 }

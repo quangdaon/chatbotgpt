@@ -2,7 +2,7 @@
 	export let prompt: string;
 </script>
 
-<details>
+<details class="chat-details">
 	<summary>Show Bot Prompt</summary>
 	<p class="prompt-details">
 		{prompt}
@@ -16,6 +16,10 @@
 		padding: 0.25em;
 		@include theme.light {
 			background: var(--color-gray);
+		}
+
+		@media print {
+			display: none;
 		}
 	}
 

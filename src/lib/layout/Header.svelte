@@ -25,6 +25,10 @@
 		background: var(--color-primary);
 		justify-content: space-between;
 		align-items: center;
+
+		@media print {
+			display: none;
+		}
 	}
 
 	.home {
