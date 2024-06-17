@@ -32,6 +32,14 @@
 		botModel = botModel || defaultBotModel;
 		loading = false;
 	});
+	
+	const handleTextAreaKeypress = (e: KeyboardEvent) => {
+		console.log(e.key);
+		if (tempPrompt && e.key === 'Tab') {
+			e.preventDefault();
+			botPrompt = tempPrompt;
+		}
+	};
 
 	const submit = () => {
 		const bot: Bot = {
@@ -163,7 +171,13 @@
 
 	<div class="field">
 		<label for="bot-prompt">Prompt</label>
-		<textarea name="bot-prompt" id="bot-prompt" placeholder={tempPrompt} bind:value={botPrompt} />
+		<textarea
+			name="bot-prompt"
+			id="bot-prompt"
+			placeholder={tempPrompt}
+			on:keydown={e => handleTextAreaKeypress(e)}
+			bind:value={botPrompt}
+		/>
 	</div>
 
 	<div>
