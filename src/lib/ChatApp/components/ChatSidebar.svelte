@@ -2,6 +2,7 @@
 	import type { Bot } from '$lib/models/Bot';
 	import { appMode } from '$lib/stores/config';
 	import { createEventDispatcher } from 'svelte';
+	import ChatSidebarBot from './ChatSidebarBot.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -14,25 +15,16 @@
 		<ul class="bots">
 			{#each bots as bot}
 				<li class="bot">
-					<button on:click={() => dispatch('selected', bot)}>
-						<div class="bot-avatar">
-							<img src={bot.profilePicture} alt={bot.name} />
-						</div>
-						<div class="bot-name">
-							<span>
-								{bot.name}
-							</span>
-						</div>
-					</button>
+					<ChatSidebarBot {bot} on:selected on:deleted />
 				</li>
 			{/each}
 			{#if $appMode === 'dev'}
-				<li class="bot">
+				<li class="btn">
 					<button on:click={() => dispatch('added')}>
-						<div class="bot-avatar">
+						<div class="btn-icon">
 							<span>+</span>
 						</div>
-						<div class="bot-name">
+						<div class="btn-label">
 							<span>Create Bot</span>
 						</div>
 					</button>
@@ -69,7 +61,7 @@
 		margin: 0;
 	}
 
-	.bot {
+	.btn {
 		button {
 			padding: 1em;
 			background: none;
@@ -84,7 +76,7 @@
 				background: rgba(#000, 0.2);
 			}
 		}
-		&-avatar {
+		&-icon {
 			flex: 0 0 auto;
 			background: rgba(#000, 0.2);
 			display: flex;
@@ -99,7 +91,7 @@
 				width: 100%;
 			}
 		}
-		&-name {
+		&-label {
 			flex: 1 1 0;
 			overflow: hidden;
 			white-space: nowrap;

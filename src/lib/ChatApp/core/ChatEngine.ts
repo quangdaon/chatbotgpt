@@ -33,6 +33,10 @@ export class ChatEngine {
 		this.bots.update((bots) => [...bots, bot]);
 	}
 
+	deleteBot(bot: Bot): void {
+		this.bots.update((bots) => bots.filter((e) => e.id !== bot.id));
+	}
+
 	async selectBot(bot: Bot) {
 		const loadingTimeout = setTimeout(() => appState.set('loading'), 50);
 

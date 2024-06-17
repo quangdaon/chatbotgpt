@@ -61,6 +61,7 @@
 			<ChatSidebar
 				bots={$bots}
 				on:selected={(evt) => engine.selectBot(evt.detail)}
+				on:deleted={(evt) => engine.deleteBot(evt.detail)}
 				on:added={() => ($appState = 'custom')}
 			/>
 		</div>
