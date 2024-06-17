@@ -29,6 +29,16 @@
 						</div>
 					</button>
 				</li>
+				<li class="btn">
+					<button on:click={() => dispatch('resetted')}>
+						<div class="btn-icon">
+							<span>&#x21bb;</span>
+						</div>
+						<div class="btn-label">
+							<span>Reset Bots</span>
+						</div>
+					</button>
+				</li>
 			{/if}
 		</ul>
 	</details>

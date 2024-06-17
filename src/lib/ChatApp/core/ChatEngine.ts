@@ -23,6 +23,10 @@ export class ChatEngine {
 	async loadBots() {
 		if (get(this.bots).length > 0) return;
 
+		await this.resetBots();
+	}
+
+	async resetBots() {
 		const botsCall = await fetch(`${base}/api/bots`);
 		const botsPreset: Bot[] = await botsCall.json();
 
@@ -35,6 +39,10 @@ export class ChatEngine {
 
 	deleteBot(bot: Bot): void {
 		this.bots.update((bots) => bots.filter((e) => e.id !== bot.id));
+
+		if (bot.id === get(this.activeContext)?.bot.id) {
+			this.activeContext.set(null)
+		}
 	}
 
 	async selectBot(bot: Bot) {

@@ -62,6 +62,7 @@
 				bots={$bots}
 				on:selected={(evt) => engine.selectBot(evt.detail)}
 				on:deleted={(evt) => engine.deleteBot(evt.detail)}
+				on:resetted={(evt) => engine.resetBots()}
 				on:added={() => ($appState = 'custom')}
 			/>
 		</div>
