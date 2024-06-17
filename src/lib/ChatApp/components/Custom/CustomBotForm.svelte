@@ -11,6 +11,7 @@
 
 	let imgPreview: HTMLImageElement;
 	let upload: HTMLInputElement;
+	let imgUrl: HTMLInputElement;
 
 	let botId: string = crypto.randomUUID();
 	let botName: string;
@@ -32,7 +33,7 @@
 		botModel = botModel || defaultBotModel;
 		loading = false;
 	});
-	
+
 	const handleTextAreaKeypress = (e: KeyboardEvent) => {
 		console.log(e.key);
 		if (tempPrompt && e.key === 'Tab') {
@@ -127,7 +128,13 @@
 	{:else}
 		<div class="field">
 			<label for="bot-profile">Profile Picture URL</label>
-			<input required id="bot-profile" type="url" bind:value={botAvatarUrl} />
+			<input
+				required
+				id="bot-profile"
+				type="text"
+				bind:this={imgUrl}
+				bind:value={botAvatarUrl}
+			/>
 			<div class="avatar-toggle">
 				<button on:click={() => (useUpload = true)}>Upload Image Instead</button>
 			</div>
@@ -143,6 +150,8 @@
 					src={botAvatarUrl}
 					alt="Preview of avatar"
 					crossOrigin="anonymous"
+					on:error={() => imgUrl?.setCustomValidity('Unable to load image.')}
+					on:load={() => imgUrl?.setCustomValidity('')}
 				/>
 			</div>
 		</div>
@@ -175,7 +184,7 @@
 			name="bot-prompt"
 			id="bot-prompt"
 			placeholder={tempPrompt}
-			on:keydown={e => handleTextAreaKeypress(e)}
+			on:keydown={(e) => handleTextAreaKeypress(e)}
 			bind:value={botPrompt}
 		/>
 	</div>

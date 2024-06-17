@@ -8,7 +8,7 @@ export function GET({ request }) {
 	const response: Bot[] = Object.entries(bots).map(([id, bot]) => ({
 		id,
 		name: bot.displayName,
-		profilePicture: `${url.origin}${base}/profile/${id}.jpg`,
+		profilePicture: `${base}/profile/${id}.jpg`,
 		prompt: bot.prompt,
 		model: bot.model ?? ''
 	}));
