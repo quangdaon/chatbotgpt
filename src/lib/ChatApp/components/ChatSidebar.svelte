@@ -102,10 +102,7 @@
 			}
 		}
 		&-label {
-			flex: 1 1 0;
-			overflow: hidden;
-			white-space: nowrap;
-			text-overflow: ellipsis;
+      color: var(--color-foreground);
 		}
 	}
 </style>

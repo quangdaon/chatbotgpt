@@ -94,6 +94,7 @@
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: ellipsis;
+      color: var(--color-foreground);
 		}
 		&-toggle {
 			position: absolute;
@@ -105,6 +106,7 @@
 				width: 2em;
 				background: none;
 				border-radius: 50%;
+        color: var(--color-foreground);
 				&:hover {
 					background: rgba(#000, 0.5);
 				}

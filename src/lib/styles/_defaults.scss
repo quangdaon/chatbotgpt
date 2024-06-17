@@ -77,8 +77,12 @@ select {
 	font-family: inherit;
 	font-size: inherit;
 	border: none;
-	border-radius: 0.25em;
+	border-radius: 1em;
 	color: currentColor;
+	border: 0.25em solid var(--color-primary);
+	@include theme.light {
+		background: var(--color-gray);
+	}
 }
 
 %inputs-text {
