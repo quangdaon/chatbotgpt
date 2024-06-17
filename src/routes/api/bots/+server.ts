@@ -3,7 +3,8 @@ import bots from '$data/bots.json';
 import type { Bot } from '$lib/models/Bot';
 import { base } from '$app/paths';
 
-export function GET({url}) {
+export function GET({ request }) {
+	const url = new URL(request.url);
 	const response: Bot[] = Object.entries(bots).map(([id, bot]) => ({
 		id,
 		name: bot.displayName,
