@@ -36,8 +36,9 @@
 		$context?.clear();
 	};
 
-	const addBot = (bot: Bot) => {
-		engine.addBot(bot);
+	const addBot = async (bot: Bot) => {
+		await engine.addBot(bot);
+		$appState = 'chatting';
 	};
 
 	const editBot = async (bot: Bot | null = null) => {

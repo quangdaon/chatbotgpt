@@ -5,7 +5,6 @@ import type { ChatMessage } from '$lib/models/ChatMessage';
 import { sha256 } from '$lib/helpers/crypto';
 import { base } from '$app/paths';
 import { appState } from '$lib/stores/appState';
-import { customBots } from '$lib/stores/bots';
 import { localStorageWritable } from '$lib/stores/localStorageWritable';
 
 export class ChatEngine {
@@ -39,12 +38,16 @@ export class ChatEngine {
 		this.bots.set(botsPreset);
 	}
 
-	addBot(bot: Bot) {
+	async addBot(bot: Bot) {
 		this.bots.update((bots) => {
 			return bots.find((e) => e.id === bot.id)
 				? bots.map((e) => (e.id === bot.id ? bot : e))
 				: [...bots, bot];
 		});
+
+		const key = await this.getContextKey(bot);
+		this.contexts[key] = this.createChatContext(bot, key);
+		this.activeContext.set(this.contexts[key]);
 	}
 
 	deleteBot(bot: Bot): void {
@@ -58,7 +61,7 @@ export class ChatEngine {
 	async selectBot(bot: Bot) {
 		const loadingTimeout = setTimeout(() => appState.set('loading'), 50);
 
-		const key = await sha256(`${bot.id}_${this.user}`);
+		const key = await this.getContextKey(bot);
 
 		if (!this.contexts[key]) {
 			this.contexts[key] = this.createChatContext(bot, key);
@@ -68,6 +71,10 @@ export class ChatEngine {
 
 		clearTimeout(loadingTimeout);
 		appState.set('chatting');
+	}
+
+	private async getContextKey(bot: Bot) {
+		return await sha256(`${bot.id}_${this.user}`);
 	}
 
 	private createChatContext(bot: Bot, key: string): ChatContext {
