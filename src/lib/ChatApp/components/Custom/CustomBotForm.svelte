@@ -18,6 +18,7 @@
 	let botPrompt: string;
 	let botModels: string[];
 	let botModel: string;
+	let botTemp: number = 0.2;
 	let useUpload = false;
 	let loading = true;
 
@@ -38,6 +39,7 @@
 			name: botName,
 			profilePicture: getBase64Image(),
 			model: botModel,
+			temperature: botTemp,
 			prompt: botPrompt
 		};
 
@@ -82,6 +84,7 @@
 		botAvatarUrl = botIn?.profilePicture ?? '';
 		botPrompt = botIn?.prompt ?? '';
 		botModel = botIn?.model || defaultBotModel;
+		botTemp = botIn?.temperature ?? 0.2;
 
 		useUpload = !botIn;
 	};
@@ -147,6 +150,16 @@
 			</select>
 		</div>
 	{/if}
+
+	<div class="field">
+		<label for="bot-temperature">Temperature</label>
+		<div class="field-range">
+			<input type="range" bind:value={botTemp} min="0" max="2" step="0.1" />
+			<span>
+				{botTemp}
+			</span>
+		</div>
+	</div>
 
 	<div class="field">
 		<label for="bot-prompt">Prompt</label>

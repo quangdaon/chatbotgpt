@@ -9,6 +9,16 @@
 	export let bot: Bot;
 
 	let menuOpen = false;
+
+	const emitEdit = () => {
+		dispatch('editted', bot);
+		menuOpen = false;
+	};
+
+	const emitDelete = () => {
+		dispatch('deleted', bot);
+		menuOpen = false;
+	};
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -34,12 +44,8 @@
 		{#if menuOpen}
 			<div class="bot-menu" use:clickOutside on:click_outside={() => (menuOpen = false)}>
 				<ul>
-					<li>
-						<button on:click={() => dispatch('editted', bot)}>Edit</button>
-					</li>
-					<li>
-						<button on:click={() => dispatch('deleted', bot)}>Delete</button>
-					</li>
+					<li><button on:click={emitEdit}>Edit</button></li>
+					<li><button on:click={emitDelete}>Delete</button></li>
 				</ul>
 			</div>
 		{/if}
@@ -111,17 +117,17 @@
 			top: calc(100% - 0.5em);
 			ul {
 				list-style-type: none;
-        background: var(--color-primary);
-        padding: 0;
-        border-radius: 0.5em;
-        overflow: hidden;
+				background: var(--color-primary);
+				padding: 0;
+				border-radius: 0.5em;
+				overflow: hidden;
 				li {
 					margin: 0;
 					button {
 						border-radius: 0;
-            text-align: left;
-            width: 100%;
-            padding: 0.5em;
+						text-align: left;
+						width: 100%;
+						padding: 0.5em;
 						&:hover {
 							background: rgba(#000, 0.1);
 						}
