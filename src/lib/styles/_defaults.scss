@@ -71,6 +71,20 @@ textarea {
 	padding: 1em;
 }
 
+select {
+	background: var(--color-primary);
+	padding: 0.25em;
+	font-family: inherit;
+	font-size: inherit;
+	border: none;
+	border-radius: 1em;
+	color: currentColor;
+	border: 0.25em solid var(--color-primary);
+	@include theme.light {
+		background: var(--color-gray);
+	}
+}
+
 %inputs-text {
 	padding: 0.25em 1em;
 }

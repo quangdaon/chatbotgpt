@@ -4,10 +4,14 @@ import OpenAI from 'openai';
 import { OPENAI_SECRET_KEY } from '$env/static/private';
 import { getPrompt } from '$lib/helpers/open-ai.js';
 import type { ChatCompletionRequest } from '$lib/models/ChatCompletionRequest.js';
+import { PUBLIC_OPENAI_SECRET_KEY_HEADER } from '$env/static/public';
 
 async function completeChat(request: any) {
+	const headers = request.headers;
+	const openAiKey = headers.get(PUBLIC_OPENAI_SECRET_KEY_HEADER);
+
 	const openai = new OpenAI({
-		apiKey: OPENAI_SECRET_KEY
+		apiKey: openAiKey || OPENAI_SECRET_KEY
 	});
 
 	const { messages, bot }: ChatCompletionRequest = await request.json();
@@ -31,10 +35,12 @@ async function completeChat(request: any) {
 		...userGptMessages
 	];
 
+	const defaultModel = 'gpt-3.5-turbo';
+	const model = (openAiKey && bot.model) || defaultModel;
 	const chatCompletion = await openai.chat.completions.create({
 		messages: gptMessages,
-		model: 'gpt-3.5-turbo',
-		temperature: 0.2
+		model,
+		temperature: bot.temperature ?? 0.2
 	});
 
 	const choice = chatCompletion.choices[0];

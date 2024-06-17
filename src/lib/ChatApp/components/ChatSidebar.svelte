@@ -2,6 +2,7 @@
 	import type { Bot } from '$lib/models/Bot';
 	import { appMode } from '$lib/stores/config';
 	import { createEventDispatcher } from 'svelte';
+	import ChatSidebarBot from './ChatSidebarBot.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -14,32 +15,21 @@
 		<ul class="bots">
 			{#each bots as bot}
 				<li class="bot">
-					<button on:click={() => dispatch('selected', bot)}>
-						<div class="bot-avatar">
-							<img src={bot.profilePicture} alt={bot.name} />
-						</div>
-						<div class="bot-name">
-							<span>
-								{bot.name}
-							</span>
-						</div>
-					</button>
+					<ChatSidebarBot {bot} on:selected on:editted on:deleted />
 				</li>
 			{/each}
-			{#if $appMode === 'dev'}
-				<li class="bot">
-					<button on:click={() => dispatch('added')}>
-						<div class="bot-avatar">
-							<span>+</span>
-						</div>
-						<div class="bot-name">
-							<span>Create Bot</span>
-						</div>
-					</button>
-				</li>
-			{/if}
 		</ul>
 	</details>
+	{#if $appMode === 'dev'}
+		<ul class="controls">
+			<li class="control">
+				<button on:click={() => dispatch('added')}>Create Bot</button>
+			</li>
+			<li class="control">
+				<button on:click={() => dispatch('resetted')}>Restore Defaults Bots</button>
+			</li>
+		</ul>
+	{/if}
 </div>
 
 <style lang="scss">
@@ -69,9 +59,15 @@
 		margin: 0;
 	}
 
-	.bot {
+	.controls {
+		list-style-type: none;
+		padding: 0;
+		font-size: 1.2em;
+	}
+
+	.control {
 		button {
-			padding: 1em;
+			padding: 0.5em 1em;
 			background: none;
 			border: none;
 			display: flex;
@@ -80,30 +76,10 @@
 			text-align: left;
 			gap: 0.5em;
 			align-items: center;
+			color: var(--color-foreground);
 			&:hover {
 				background: rgba(#000, 0.2);
 			}
-		}
-		&-avatar {
-			flex: 0 0 auto;
-			background: rgba(#000, 0.2);
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			width: 2em;
-			aspect-ratio: 1;
-			border-radius: 50%;
-			overflow: hidden;
-			img {
-				display: block;
-				width: 100%;
-			}
-		}
-		&-name {
-			flex: 1 1 0;
-			overflow: hidden;
-			white-space: nowrap;
-			text-overflow: ellipsis;
 		}
 	}
 </style>

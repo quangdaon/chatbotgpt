@@ -1,22 +1,45 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import ChatHeader from '../ChatHeader.svelte';
 	import type { Bot } from '$lib/models/Bot';
+	import { base } from '$app/paths';
+	import { openAiKey } from '$lib/stores/config';
+	import { PUBLIC_OPENAI_SECRET_KEY_HEADER } from '$env/static/public';
 	const dispatch = createEventDispatcher();
+
+	const defaultBotModel = 'gpt-3.5-turbo';
 
 	let imgPreview: HTMLImageElement;
 	let upload: HTMLInputElement;
 
+	let botId: string = crypto.randomUUID();
 	let botName: string;
 	let botAvatarUrl: string;
 	let botPrompt: string;
-	let useUpload = true;
+	let botModels: string[];
+	let botModel: string;
+	let botTemp: number = 0.2;
+	let useUpload = false;
+	let loading = true;
+
+	onMount(async () => {
+		const resp = await fetch(`${base}/api/models`, {
+			headers: {
+				[PUBLIC_OPENAI_SECRET_KEY_HEADER]: $openAiKey
+			}
+		});
+		botModels = await resp.json();
+		botModel = botModel || defaultBotModel;
+		loading = false;
+	});
 
 	const submit = () => {
 		const bot: Bot = {
-			id: crypto.randomUUID(),
+			id: botId,
 			name: botName,
 			profilePicture: getBase64Image(),
+			model: botModel,
+			temperature: botTemp,
 			prompt: botPrompt
 		};
 
@@ -55,6 +78,17 @@
 		}
 	}
 
+	export const resetBotData = (botIn: Bot | null = null) => {
+		botId = botIn?.id ?? crypto.randomUUID();
+		botName = botIn?.name ?? '';
+		botAvatarUrl = botIn?.profilePicture ?? '';
+		botPrompt = botIn?.prompt ?? '';
+		botModel = botIn?.model || defaultBotModel;
+		botTemp = botIn?.temperature ?? 0.2;
+
+		useUpload = !botIn;
+	};
+
 	$: tempPrompt = botName ? `You are ${botName}.` : '';
 </script>
 
@@ -79,7 +113,7 @@
 				accept="image/*"
 			/>
 			<div class="avatar-toggle">
-				<button on:click={() => useUpload = false}>Enter URL Instead</button>
+				<button on:click={() => (useUpload = false)}>Enter URL Instead</button>
 			</div>
 		</div>
 	{:else}
@@ -87,7 +121,7 @@
 			<label for="bot-profile">Profile Picture URL</label>
 			<input required id="bot-profile" type="url" bind:value={botAvatarUrl} />
 			<div class="avatar-toggle">
-				<button on:click={() => useUpload = true}>Upload Image Instead</button>
+				<button on:click={() => (useUpload = true)}>Upload Image Instead</button>
 			</div>
 		</div>
 	{/if}
@@ -106,14 +140,34 @@
 		</div>
 	{/if}
 
+	{#if botModels?.length}
+		<div class="field">
+			<label for="bot-model">Model</label>
+			<select name="bot-model" id="bot-model" bind:value={botModel}>
+				{#each botModels as model}
+					<option>{model}</option>
+				{/each}
+			</select>
+		</div>
+	{/if}
+
+	<div class="field">
+		<label for="bot-temperature">Temperature</label>
+		<div class="field-range">
+			<input type="range" bind:value={botTemp} min="0" max="2" step="0.1" />
+			<span>
+				{botTemp}
+			</span>
+		</div>
+	</div>
+
 	<div class="field">
 		<label for="bot-prompt">Prompt</label>
-		<textarea name="bot-prompt" id="bot-prompt" placeholder={tempPrompt} bind:value={botPrompt}
-		></textarea>
+		<textarea name="bot-prompt" id="bot-prompt" placeholder={tempPrompt} bind:value={botPrompt} />
 	</div>
 
 	<div>
-		<button type="submit">Do the Magic</button>
+		<button type="submit" disabled={loading}>Do the Magic</button>
 	</div>
 </form>
 
@@ -124,19 +178,6 @@
 
 	.form {
 		padding: 1em;
-		.field {
-			margin-bottom: 1em;
-			label {
-				display: block;
-				margin-bottom: 0.5em;
-			}
-			textarea {
-				min-width: 300px;
-				min-height: 300px;
-				width: 800px;
-				max-width: min(800px, 90%);
-			}
-		}
 		.avatar-toggle {
 			margin-top: 1em;
 		}

@@ -44,6 +44,9 @@
 					<hr />
 				</li>
 				<li>
+					<a href="{base}/settings">Settings</a>
+				</li>
+				<li>
 					<a href="{base}/about">About</a>
 				</li>
 				<li>
