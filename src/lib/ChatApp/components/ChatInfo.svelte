@@ -30,6 +30,9 @@
 		}
 		&-name {
 			margin: 0;
+			@media print {
+				font-size: 1.5em;
+			}
 		}
 	}
 </style>
