@@ -35,7 +35,7 @@ async function completeChat(request: any) {
 		...userGptMessages
 	];
 
-	const defaultModel = 'gpt-3.5-turbo';
+	const defaultModel = 'gpt-4o';
 	const model = (openAiKey && bot.model) || defaultModel;
 	const chatCompletion = await openai.chat.completions.create({
 		messages: gptMessages,
