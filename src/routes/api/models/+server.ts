@@ -14,7 +14,9 @@ export async function GET({ request }) {
 
 	const response = await openai.models.list();
 	const models = response.data
-		.filter((e) => e.owned_by === 'openai' || e.owned_by.startsWith('user-'))
+		.filter(
+			(e) => e.owned_by === 'openai' || e.owned_by === 'system' || e.owned_by.startsWith('user-')
+		)
 		.sort((a, b) => a.created - b.created)
 		.map((e) => e.id);
 
