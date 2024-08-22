@@ -53,6 +53,8 @@
 </div>
 
 <style lang="scss">
+	@use '~/breakpoints';
+
 	.bot {
 		position: relative;
 		&-dev {
@@ -66,10 +68,12 @@
 			border: none;
 			display: flex;
 			width: 100%;
-			max-width: 20vw;
 			text-align: left;
 			gap: 0.5em;
 			align-items: center;
+			@include breakpoints.large {
+				max-width: 20vw;
+			}
 		}
 		&:hover {
 			background: rgba(#000, 0.2);

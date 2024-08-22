@@ -52,14 +52,19 @@
 
 	.message {
 		background: black;
-		width: 66%;
-		padding: 1em;
 		border-radius: 1em;
+		padding: 1em;
+		width: fit-content;
+		max-width: 95%;
 
 		@media print {
 			width: 90%;
 			background-color: transparent;
 			padding: 0;
+		}
+
+		@include breakpoints.large {
+			max-width: 66%;
 		}
 
 		&-row {
@@ -73,6 +78,7 @@
 
 		&-other {
 			background: var(--color-gray);
+			border-bottom-left-radius: 0;
 			@media print {
 				background-color: transparent;
 			}
@@ -82,14 +88,27 @@
 			margin-left: auto;
 			background: var(--color-primary);
 			color: var(--color-white);
+			border-bottom-right-radius: 0;
+			text-align: right;
+
 			@media print {
 				text-align: right;
 				background-color: transparent;
 			}
+
+			@include breakpoints.large {
+				text-align: left;
+			}
 		}
 
 		&-info {
+			display: none;
 			font-size: 0.875em;
+			margin-bottom: 1em;
+
+			@include breakpoints.large {
+				display: block;
+			}
 		}
 
 		&-author {
@@ -98,12 +117,15 @@
 
 		&-time {
 			font-size: 0.875em;
-			display: inline-block;
-			margin-left: 0.5em;
+			display: block;
+
+			@include breakpoints.large {
+				display: inline-block;
+				margin-left: 0.5em;
+			}
 		}
 
 		&-content {
-			margin-top: 1em;
 			white-space: pre-wrap;
 
 			@media print {

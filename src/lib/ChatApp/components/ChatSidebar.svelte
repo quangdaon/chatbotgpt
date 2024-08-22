@@ -34,6 +34,8 @@
 
 <style lang="scss">
 	@use '~/theme';
+	@use '~/breakpoints';
+
 	.chat-sidebar {
 		height: 100%;
 		background-color: var(--color-mid);
@@ -72,13 +74,16 @@
 			border: none;
 			display: flex;
 			width: 100%;
-			max-width: 20vw;
 			text-align: left;
 			gap: 0.5em;
 			align-items: center;
 			color: var(--color-foreground);
 			&:hover {
 				background: rgba(#000, 0.2);
+			}
+			
+			@include breakpoints.large {
+				max-width: 20vw;
 			}
 		}
 	}

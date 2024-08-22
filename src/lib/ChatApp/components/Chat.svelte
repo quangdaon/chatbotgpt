@@ -13,10 +13,13 @@
 	import { appState } from '$lib/stores/appState';
 	import CustomBotForm from './Custom/CustomBotForm.svelte';
 	import type { Bot } from '$lib/models/Bot';
+	import { fly } from 'svelte/transition';
+	import { isMobile } from '$lib/stores/isMobile';
 
 	const engine = new ChatEngine();
 	let customBotForm: CustomBotForm;
 	let botToEdit: Bot | null = null;
+	let sidebarOpen = !$isMobile;
 
 	onMount(async () => {
 		await engine.init();
@@ -46,6 +49,13 @@
 		$appState = 'custom';
 		await tick();
 		customBotForm.resetBotData(bot);
+		if ($isMobile) sidebarOpen = false;
+	};
+
+	const selectBot = (bot: Bot) => {
+		engine.selectBot(bot);
+
+		if ($isMobile) sidebarOpen = false;
 	};
 
 	$: bots = engine.bots;
@@ -63,26 +73,33 @@
 	}
 </script>
 
+<svelte:body />
 <main class="app">
 	<Header />
 
 	<div class="body">
-		<div class="sidebar">
-			<ChatSidebar
-				bots={$bots}
-				on:selected={(evt) => engine.selectBot(evt.detail)}
-				on:deleted={(evt) => engine.deleteBot(evt.detail)}
-				on:editted={(evt) => editBot(evt.detail)}
-				on:resetted={() => engine.resetBots()}
-				on:added={() => editBot()}
-			/>
-		</div>
+		{#if sidebarOpen}
+			<div class="sidebar" transition:fly={{ x: -100, duration: 400 }}>
+				<ChatSidebar
+					bots={$bots}
+					on:selected={(evt) => selectBot(evt.detail)}
+					on:deleted={(evt) => engine.deleteBot(evt.detail)}
+					on:editted={(evt) => editBot(evt.detail)}
+					on:resetted={() => engine.resetBots()}
+					on:added={() => editBot()}
+				/>
+			</div>
+		{/if}
 
 		<div class="chat-app">
 			{#if $appState === 'custom'}
-				<CustomBotForm bind:this={customBotForm} on:submitted={({ detail }) => addBot(detail)} />
+				<CustomBotForm
+					bind:this={customBotForm}
+					on:submitted={({ detail }) => addBot(detail)}
+					on:toggled={() => (sidebarOpen = !sidebarOpen)}
+				/>
 			{:else if $appState === 'chatting' && bot}
-				<ChatInfo {bot} />
+				<ChatInfo {bot} on:toggled={() => (sidebarOpen = !sidebarOpen)} />
 				{#if $appMode === 'dev'}
 					<ChatPrompt prompt={$prompt || ''} />
 				{/if}
@@ -101,13 +118,15 @@
 					</svelte:fragment>
 				</MessageEntry>
 			{:else}
-				<ChatWelcome state={$appState} />
+				<ChatWelcome state={$appState} on:toggled={() => (sidebarOpen = !sidebarOpen)} />
 			{/if}
 		</div>
 	</div>
 </main>
 
 <style lang="scss">
+	@use '~/breakpoints';
+
 	.app {
 		display: flex;
 		flex-direction: column;
@@ -119,16 +138,30 @@
 	}
 
 	.body {
-		display: flex;
+		position: relative;
+		display: block;
 		flex: 1 1 0;
+		display: flex;
+		@include breakpoints.large {
+			display: flex;
+		}
 	}
 
 	.sidebar {
-		flex: 0 0 20%;
-
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 100%;
+		z-index: 30;
 		@media print {
 			display: none;
 			flex: 0;
+		}
+
+		@include breakpoints.large {
+			position: relative;
+			display: block;
+			flex: 0 0 20%;
 		}
 	}
 
@@ -138,6 +171,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: stretch;
+		max-width: 100%;
 
 		@media print {
 			width: 100%;
