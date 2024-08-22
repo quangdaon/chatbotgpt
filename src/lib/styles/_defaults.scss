@@ -1,4 +1,5 @@
 @use './utils/theme';
+@use '~/breakpoints';
 
 :root {
 	--font-heading: 'Montserrat', sans-serif;
@@ -36,10 +37,14 @@ body {
 
 body {
 	font-family: var(--font-body);
-	font-size: 18px;
+	font-size: 16px;
 	color: var(--color-foreground);
 	background-color: var(--color-background);
 	line-height: 1.5;
+
+	@include breakpoints.large {
+		font-size: 18px;
+	}
 }
 
 h1,
@@ -80,6 +85,7 @@ select {
 	border-radius: 1em;
 	color: currentColor;
 	border: 0.25em solid var(--color-primary);
+	max-width: 100%;
 	@include theme.light {
 		background: var(--color-gray);
 	}

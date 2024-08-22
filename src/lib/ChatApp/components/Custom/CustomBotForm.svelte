@@ -101,7 +101,7 @@
 	$: tempPrompt = botName ? `You are ${botName}.` : '';
 </script>
 
-<ChatHeader>
+<ChatHeader on:toggled>
 	<h1>Build Your Own Bot</h1>
 </ChatHeader>
 
@@ -128,13 +128,7 @@
 	{:else}
 		<div class="field">
 			<label for="bot-profile">Profile Picture URL</label>
-			<input
-				required
-				id="bot-profile"
-				type="text"
-				bind:this={imgUrl}
-				bind:value={botAvatarUrl}
-			/>
+			<input required id="bot-profile" type="text" bind:this={imgUrl} bind:value={botAvatarUrl} />
 			<div class="avatar-toggle">
 				<button on:click={() => (useUpload = true)}>Upload Image Instead</button>
 			</div>
@@ -195,8 +189,14 @@
 </form>
 
 <style lang="scss">
+	@use '~/breakpoints';
 	h1 {
+		font-size: 1.5em;
 		margin: 0;
+
+		@include breakpoints.large {
+			font-size: 2em;
+		}
 	}
 
 	.form {

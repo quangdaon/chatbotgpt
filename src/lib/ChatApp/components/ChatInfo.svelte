@@ -5,7 +5,7 @@
 	export let bot: Bot;
 </script>
 
-<ChatHeader>
+<ChatHeader on:toggled>
 	<h1 class="chat-info-name">
 		<div class="chat-info-avatar">
 			<img src={bot.profilePicture} alt="{bot.name} Avatar" />
@@ -16,6 +16,7 @@
 
 <style lang="scss">
 	@use '~/theme';
+	@use '~/breakpoints';
 
 	.chat-info {
 		&-avatar {
@@ -24,14 +25,25 @@
 			margin-right: 0.5em;
 			img {
 				display: block;
-				width: 2em;
+				width: 1.5em;
 				border-radius: 50%;
+				@include breakpoints.large {
+					width: 2em;
+				}
 			}
 		}
 		&-name {
+			flex: 1 1 0;
 			margin: 0;
+			font-size: 1em;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 			@media print {
 				font-size: 1.5em;
+			}
+			@include breakpoints.large {
+				font-size: 2em;
 			}
 		}
 	}

@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import type { AppState } from '$lib/stores/appState';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let state: AppState;
 </script>
@@ -18,12 +21,18 @@
 		{#if state == 'loading'}
 			<h3>Loading...</h3>
 		{:else}
-			<p>Start a chat by selecting a user on the left.</p>
+			<div class="message-desktop">
+				<p>Start a chat by selecting a user on the left.</p>
+			</div>
+			<div class="message-mobile">
+				<button on:click={() => dispatch('toggled')}>Open a Chat</button>
+			</div>
 		{/if}
 	</div>
 </div>
 
 <style lang="scss">
+	@use '~/breakpoints';
 	.chat-welcome {
 		flex: 1 1 0;
 		display: flex;
@@ -37,13 +46,27 @@
 				img {
 					display: block;
 					margin: auto;
-					width: 40%;
+					width: 90%;
+					@include breakpoints.large {
+						width: 40%;
+					}
 				}
 			}
 
 			p {
 				font-style: italic;
 				margin-top: 3em;
+			}
+		}
+
+		.message-desktop {
+			display: none;
+		}
+
+		.message-mobile {
+			font-size: 2em;
+			@include breakpoints.large {
+				display: none;
 			}
 		}
 	}

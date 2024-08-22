@@ -100,6 +100,7 @@
 		right: 0;
 		top: 100%;
 		margin-top: 1em;
+		z-index: 50;
 		@include theme.light {
 			box-shadow: 0 1em 1em rgba(#000, 0.1);
 		}

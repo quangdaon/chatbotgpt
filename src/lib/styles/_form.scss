@@ -1,3 +1,5 @@
+@use '~/breakpoints';
+
 .field {
 	margin-bottom: 2em;
 	label {
@@ -7,8 +9,11 @@
 	textarea {
 		min-width: 300px;
 		min-height: 300px;
+		max-width: 100%;
 		width: 800px;
-		max-width: min(800px, 90%);
+		@include breakpoints.large {
+			max-width: min(800px, 90%);
+		}
 	}
 	&-range {
 		input,
